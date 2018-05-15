@@ -1,4 +1,4 @@
-//
+ //
 //  AppDelegate.swift
 //  TestProjectSpaceoByKurilov
 //
@@ -13,9 +13,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.window?.makeKeyAndVisible()
+        
+        let layout = UICollectionViewFlowLayout()
+        self.window?.rootViewController = UINavigationController(rootViewController: RecipesListController(collectionViewLayout: layout))
+        
+        // get rid of black bar underneath navbar
+        UINavigationBar.appearance().barTintColor = UIColor.rgb(34, 139, 34)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        
+        application.statusBarStyle = .lightContent
+        
         return true
     }
 
