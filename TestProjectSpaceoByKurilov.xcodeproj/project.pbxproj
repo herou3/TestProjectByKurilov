@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB3B02DE20AD67C0004B132D /* RecipeDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3B02DD20AD67C0004B132D /* RecipeDetailController.swift */; };
+		AB3B02E020AD9E72004B132D /* DetailRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3B02DF20AD9E72004B132D /* DetailRecipe.swift */; };
 		AB78374E20AA199C00587585 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78374D20AA199C00587585 /* AppDelegate.swift */; };
 		AB78375020AA199C00587585 /* RecipesListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78374F20AA199C00587585 /* RecipesListController.swift */; };
 		AB78375520AA199E00587585 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB78375420AA199E00587585 /* Assets.xcassets */; };
@@ -15,9 +17,15 @@
 		AB78376620AA587100587585 /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376520AA587100587585 /* RecipeCell.swift */; };
 		AB78376920AA5A9F00587585 /* SortedMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376820AA5A9F00587585 /* SortedMenuBar.swift */; };
 		AB78376C20AA7F8000587585 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376B20AA7F8000587585 /* Recipe.swift */; };
+		AB78376E20AB1A3B00587585 /* RecipeStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376D20AB1A3B00587585 /* RecipeStruct.swift */; };
+		AB78377020AB9A0300587585 /* SortingLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376F20AB9A0300587585 /* SortingLauncher.swift */; };
+		AB78377220ABA99400587585 /* SortingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78377120ABA99400587585 /* SortingCell.swift */; };
+		AB78377420ACE4AD00587585 /* ReachabilityConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB3B02DD20AD67C0004B132D /* RecipeDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailController.swift; sourceTree = "<group>"; };
+		AB3B02DF20AD9E72004B132D /* DetailRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRecipe.swift; sourceTree = "<group>"; };
 		AB78374A20AA199C00587585 /* TestProjectSpaceoByKurilov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestProjectSpaceoByKurilov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB78374D20AA199C00587585 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB78374F20AA199C00587585 /* RecipesListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesListController.swift; sourceTree = "<group>"; };
@@ -28,6 +36,10 @@
 		AB78376520AA587100587585 /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
 		AB78376820AA5A9F00587585 /* SortedMenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedMenuBar.swift; sourceTree = "<group>"; };
 		AB78376B20AA7F8000587585 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
+		AB78376D20AB1A3B00587585 /* RecipeStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeStruct.swift; sourceTree = "<group>"; };
+		AB78376F20AB9A0300587585 /* SortingLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingLauncher.swift; sourceTree = "<group>"; };
+		AB78377120ABA99400587585 /* SortingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingCell.swift; sourceTree = "<group>"; };
+		AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityConnect.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				AB78376220AA57D800587585 /* Extensions.swift */,
+				AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -85,6 +98,8 @@
 			children = (
 				AB78376520AA587100587585 /* RecipeCell.swift */,
 				AB78376820AA5A9F00587585 /* SortedMenuBar.swift */,
+				AB78377120ABA99400587585 /* SortingCell.swift */,
+				AB3B02DF20AD9E72004B132D /* DetailRecipe.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -93,6 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				AB78374F20AA199C00587585 /* RecipesListController.swift */,
+				AB78376F20AB9A0300587585 /* SortingLauncher.swift */,
+				AB3B02DD20AD67C0004B132D /* RecipeDetailController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -101,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				AB78376B20AA7F8000587585 /* Recipe.swift */,
+				AB78376D20AB1A3B00587585 /* RecipeStruct.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -175,10 +193,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB3B02E020AD9E72004B132D /* DetailRecipe.swift in Sources */,
+				AB78377020AB9A0300587585 /* SortingLauncher.swift in Sources */,
+				AB78377220ABA99400587585 /* SortingCell.swift in Sources */,
+				AB78376E20AB1A3B00587585 /* RecipeStruct.swift in Sources */,
 				AB78375020AA199C00587585 /* RecipesListController.swift in Sources */,
 				AB78376320AA57D800587585 /* Extensions.swift in Sources */,
+				AB3B02DE20AD67C0004B132D /* RecipeDetailController.swift in Sources */,
 				AB78376920AA5A9F00587585 /* SortedMenuBar.swift in Sources */,
 				AB78376C20AA7F8000587585 /* Recipe.swift in Sources */,
+				AB78377420ACE4AD00587585 /* ReachabilityConnect.swift in Sources */,
 				AB78374E20AA199C00587585 /* AppDelegate.swift in Sources */,
 				AB78376620AA587100587585 /* RecipeCell.swift in Sources */,
 			);

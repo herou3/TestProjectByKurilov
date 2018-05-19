@@ -8,6 +8,8 @@
 
 import UIKit
 
+// Не используемый класс, нужно удалить?(или пересмотреть его использование в тестовом задание?)
+
 class SortedMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     lazy var collectionView: UICollectionView = {
@@ -19,8 +21,8 @@ class SortedMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegat
         return cv
     }()
     
-    let cellId = "CellId"
-    let imageNames = ["default-sorted", "date-sorted", "a-to-z-sorted"]
+    private let cellId = "CellId"
+    private let imageNames = ["default-sorted", "date-sorted", "a-to-z-sorted"]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,6 +39,7 @@ class SortedMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegat
         collectionView.backgroundColor = UIColor.rgb(34, 139, 34)
     }
     
+    //MARK: - Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 3
     }
@@ -57,7 +60,6 @@ class SortedMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -84,7 +86,6 @@ class SortedMenuCell: BaseCell {
             imageView.tintColor = isSelected ? UIColor.white : UIColor.rgb(14, 91, 13)
         }
     }
-    
     
     override func setupViews() {
         super.setupViews()
