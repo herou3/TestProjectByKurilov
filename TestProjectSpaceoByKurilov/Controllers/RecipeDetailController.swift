@@ -13,6 +13,7 @@ class RecipeDetailController: UIViewController {
     var recipesListController: RecipesListController?
     var recipe: Recipe?
     var details: DetailRecipe?
+    var scrollView: UIScrollView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,11 +31,14 @@ class RecipeDetailController: UIViewController {
         }
         
         details = DetailRecipe(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
-        self.view.addSubview(details!)
+        scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
+        scrollView?.contentSize = CGSize(width: self.view.bounds.size.width, height: self.view.bounds.size.height + 100)
+
+        self.view.addSubview(scrollView!)
+        self.scrollView?.addSubview(details!)
         
-     //   details?.recipe = recipe
-        
-        print("la la lal la ")
+        scrollView?.addConstraint(NSLayoutConstraint(item: scrollView!, attribute: .width, relatedBy: .equal, toItem: scrollView, attribute: .width, multiplier: 1, constant: 0))
+        details?.recipe = recipe
     }
     
     func dismissViewControllers() {

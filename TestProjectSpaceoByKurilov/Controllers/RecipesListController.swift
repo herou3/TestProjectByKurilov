@@ -192,7 +192,6 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
         
         showDetailForRecipe(self.recipe!)
         
-        
         print("selected \(indexPath.item)")
     }
 }
