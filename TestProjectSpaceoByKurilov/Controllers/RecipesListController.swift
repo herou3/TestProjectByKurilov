@@ -112,6 +112,8 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
         navigationItem.rightBarButtonItems = [searchBarButtonItem, sortButton]
     }
     
+    //MARK: - Unusable element
+    /*
     private func addSortedMenuBar() {
         let menuBar: SortedMenuBar = {
             let mb = SortedMenuBar()
@@ -122,6 +124,7 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: menuBar)
         view.addConstraintsWithFormat(format: "V:|[v0(50)]", views: menuBar)
     }
+     */
 
     //MARK: - Selectors
     @objc private func handleSort() {

@@ -10,8 +10,10 @@ import UIKit
 
 class DetailRecipe: UIView {
     
+    //MARK: - Property
     var scrollSize: Int?
     var imageViewRect: CGRect?
+    var pageControl = UIPageControl()
     var recipe: Recipe? {
         didSet {
             nameLabel.text = recipe?.name
@@ -24,20 +26,23 @@ class DetailRecipe: UIView {
             } else {
                 recipeImageView.image = UIImage(named: "deffualt")
             }
-            descriptionTextLabel.text = recipe?.descriptionDetail
+            if recipe?.descriptionDetail == nil || recipe?.descriptionDetail == "" {
+                descriptionTextLabel.text = "No description"
+            } else {
+                descriptionTextLabel.text = recipe?.descriptionDetail
+            }
+           
             if recipe?.difficulty != nil {
                 setupDifficultyStatus()
-            } else {
-                
             }
+            
             instructionTextView.text = recipe?.instructions?.replacingOccurrences(of: "<br>", with: "\n")
+            
             if recipe?.lastUpdated != 0 {
                 dateLabel.text = convertUnixTime(timeInterval: Double((recipe?.lastUpdated)!))
             }
         }
     }
-    
-    var pageControl = UIPageControl()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,6 +92,11 @@ class DetailRecipe: UIView {
     }
     
     private func setupDifficultyStatus() {
+        
+        for index in 0...(recipe!.difficulty! - 1) {
+            let obj = difficultyStackView.arrangedSubviews[index] as! UIImageView
+            obj.image = UIImage(named: "star-icon")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+        }
     }
     
     //MARK: - Create UIView for cell
@@ -100,7 +110,7 @@ class DetailRecipe: UIView {
     
     private let recipeImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "sushi-minsk")
+        imageView.image = UIImage(named: "image-not-found")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -122,7 +132,6 @@ class DetailRecipe: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.rgb(0, 100, 0)
-        label.text = "Суши филадельфия gsdg sdg skdhsd gksd gksdgksdgksdg vsdg"
         label.numberOfLines = 2
         return label
     }()
@@ -143,13 +152,13 @@ class DetailRecipe: UIView {
         label.text = "Description:"
         label.font = UIFont.systemFont(ofSize: 10)
         label.textColor = .gray
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let descriptionTextLabel: UILabel = {
         let textLabel = UILabel()
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.text? = "Суши обернутые лососем, внутри - рис, творожный сыр, огурец и авакадо. Подаются прохладными. Являются востребованным блюдом во всех японских ресторанах"
         //textView.textContainerInset = UIEdgeInsetsMake(0, -4, 0, 0)
         textLabel.textColor = UIColor.rgb(60, 179, 113)
         textLabel.font = UIFont.systemFont(ofSize: 14)
@@ -164,18 +173,37 @@ class DetailRecipe: UIView {
         label.text = "Instruction:"
         label.font = UIFont.systemFont(ofSize: 10)
         label.textColor = .gray
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let instructionTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.text = "Суши обернутые лососем, внутри - рис, творожный сыр, огурец и авакадо. Подаются прохладными. Являются востребованным блюдом во всех японских ресторанах"
         textView.isScrollEnabled = false
         textView.isEditable = false
         textView.font = UIFont.systemFont(ofSize: 12)
         textView.textColor = UIColor.rgb(60, 179, 113)
         return textView
+    }()
+    
+    private let helpDifficultyLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.text = "Difficulty"
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.textColor = .gray
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let difficultyStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis  = UILayoutConstraintAxis.horizontal
+        sv.alignment = UIStackViewAlignment.center
+        sv.distribution = UIStackViewDistribution.fillEqually
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
     }()
     
     func setupViews() {
@@ -188,18 +216,37 @@ class DetailRecipe: UIView {
         addSubview(descriptionTextLabel)
         addSubview(helpInstructionLabel)
         addSubview(instructionTextView)
+        addSubview(helpDifficultyLabel)
+        addSubview(difficultyStackView)
         
         scrollViewForImages.delegate = self
         
-        addConstraintsWithFormat(format: "V:|-12-[v0(256)]-12-[v1(0)]-4-[v2(50)]-4-[v3(12)]-0-[v4(40)]-4-[v5(12)]-0-[v6]-8-|", views: scrollViewForImages, viewForPageController, nameLabel, helpDescriptionLabel,  descriptionTextLabel, helpInstructionLabel, instructionTextView)
+        let intY: Int = 5
+        for intX in 1...intY {
+            
+            let gubaButton: UIImageView = {
+                let imageView = UIImageView()
+                imageView.image = UIImage(named: "startDeffault-icon")?.withRenderingMode(.alwaysOriginal)
+                imageView.contentMode = .scaleAspectFill
+                return imageView
+            }()
+            addSubview(gubaButton)
+            difficultyStackView.addArrangedSubview(gubaButton)
+            print(intX)
+        }
+        
+        
+        addConstraintsWithFormat(format: "V:|-12-[v0(256)]-12-[v1(0)]-4-[v2(50)]-4-[v3(12)]-0-[v4(40)]-4-[v5(12)]-0-[v6]-4-[v7(12)]-10-[v8(60)]-4-|", views: scrollViewForImages, viewForPageController, nameLabel, helpDescriptionLabel,  descriptionTextLabel, helpInstructionLabel, instructionTextView, helpDifficultyLabel, difficultyStackView)
         
         addConstraintsWithFormat(format: "H:|-4-[v0]-4-|", views: scrollViewForImages)
         addConstraintsWithFormat(format: "H:|-8-[v0]-8-|", views: viewForPageController)
         addConstraintsWithFormat(format: "H:|-8-[v0]-8-[v1(100)]-8-|", views: nameLabel, dateLabel)
+        addConstraintsWithFormat(format: "H:|-2-[v0]|", views: helpDescriptionLabel)
         addConstraintsWithFormat(format: "H:|-4-[v0]-4-|", views: descriptionTextLabel)
         addConstraintsWithFormat(format: "H:|-2-[v0]|", views: helpInstructionLabel)
-        addConstraintsWithFormat(format: "H:|-2-[v0]|", views: helpDescriptionLabel)
-        addConstraintsWithFormat(format: "H:|-4-[v0]-4-|", views: instructionTextView)
+        addConstraintsWithFormat(format: "H:|-4-[v0]-2-|", views: instructionTextView)
+        addConstraintsWithFormat(format: "H:|-2-[v0]|", views: helpDifficultyLabel)
+        addConstraintsWithFormat(format: "H:|-4-[v0]-4-|", views: difficultyStackView)
         
         addConstraint(NSLayoutConstraint(item: scrollViewForImages, attribute: .height, relatedBy: .equal, toItem: scrollViewForImages, attribute: .height, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: scrollViewForImages, attribute: .width, relatedBy: .equal, toItem: scrollViewForImages, attribute: .width, multiplier: 1, constant: 0))

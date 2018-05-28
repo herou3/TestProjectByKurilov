@@ -89,7 +89,7 @@ class RecipeCell: BaseCell {
     
     private let recipeImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "sushi-minsk")
+        imageView.image = UIImage(named: "image-not-found")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true

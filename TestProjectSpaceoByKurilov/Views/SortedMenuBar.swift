@@ -12,6 +12,7 @@ import UIKit
 
 class SortedMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
+    //MARK: - Property
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -20,7 +21,6 @@ class SortedMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegat
         cv.delegate = self
         return cv
     }()
-    
     private let cellId = "CellId"
     private let imageNames = ["default-sorted", "date-sorted", "a-to-z-sorted"]
     
@@ -66,6 +66,7 @@ class SortedMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegat
     }
 }
 
+    //MARK: - Cell
 class SortedMenuCell: BaseCell {
     
     let imageView: UIImageView = {

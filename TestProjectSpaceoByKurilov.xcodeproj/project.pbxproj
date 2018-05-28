@@ -11,7 +11,6 @@
 		AB3B02E020AD9E72004B132D /* DetailRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3B02DF20AD9E72004B132D /* DetailRecipe.swift */; };
 		AB78374E20AA199C00587585 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78374D20AA199C00587585 /* AppDelegate.swift */; };
 		AB78375020AA199C00587585 /* RecipesListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78374F20AA199C00587585 /* RecipesListController.swift */; };
-		AB78375520AA199E00587585 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB78375420AA199E00587585 /* Assets.xcassets */; };
 		AB78376020AA26B800587585 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB78375F20AA26B800587585 /* LaunchScreen.storyboard */; };
 		AB78376320AA57D800587585 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376220AA57D800587585 /* Extensions.swift */; };
 		AB78376620AA587100587585 /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376520AA587100587585 /* RecipeCell.swift */; };
@@ -21,6 +20,7 @@
 		AB78377020AB9A0300587585 /* SortingLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376F20AB9A0300587585 /* SortingLauncher.swift */; };
 		AB78377220ABA99400587585 /* SortingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78377120ABA99400587585 /* SortingCell.swift */; };
 		AB78377420ACE4AD00587585 /* ReachabilityConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */; };
+		AB7B178520BBCF9D0016FEFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB7B178420BBCF9D0016FEFF /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,7 +29,6 @@
 		AB78374A20AA199C00587585 /* TestProjectSpaceoByKurilov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestProjectSpaceoByKurilov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB78374D20AA199C00587585 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB78374F20AA199C00587585 /* RecipesListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesListController.swift; sourceTree = "<group>"; };
-		AB78375420AA199E00587585 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB78375920AA199E00587585 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AB78375F20AA26B800587585 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AB78376220AA57D800587585 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -40,6 +39,7 @@
 		AB78376F20AB9A0300587585 /* SortingLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingLauncher.swift; sourceTree = "<group>"; };
 		AB78377120ABA99400587585 /* SortingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingCell.swift; sourceTree = "<group>"; };
 		AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityConnect.swift; sourceTree = "<group>"; };
+		AB7B178420BBCF9D0016FEFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +78,7 @@
 				AB78376120AA57BA00587585 /* Helpers */,
 				AB78374D20AA199C00587585 /* AppDelegate.swift */,
 				AB78375F20AA26B800587585 /* LaunchScreen.storyboard */,
-				AB78375420AA199E00587585 /* Assets.xcassets */,
+				AB7B178420BBCF9D0016FEFF /* Assets.xcassets */,
 				AB78375920AA199E00587585 /* Info.plist */,
 			);
 			path = TestProjectSpaceoByKurilov;
@@ -181,8 +181,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB7B178520BBCF9D0016FEFF /* Assets.xcassets in Resources */,
 				AB78376020AA26B800587585 /* LaunchScreen.storyboard in Resources */,
-				AB78375520AA199E00587585 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,8 +329,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = R22NV699R6;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TestProjectSpaceoByKurilov/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -338,8 +339,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pavelKurilov.com.TestProjectSpaceoByKurilov;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -347,8 +349,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = R22NV699R6;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TestProjectSpaceoByKurilov/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -356,8 +359,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pavelKurilov.com.TestProjectSpaceoByKurilov;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
