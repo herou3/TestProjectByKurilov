@@ -2,7 +2,7 @@
 //  RecipeStruct.swift
 //  TestProjectSpaceoByKurilov
 //
-//  Created by Pavel Kurilov on 15.05.2018.
+//  Created by Pavel Kurilov on 29.05.2018.
 //  Copyright © 2018 Pavel Kurilov. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  TestProjectSpaceoByKurilov
 //
-//  Created by Pavel Kurilov on 15.05.2018.
+//  Created by Pavel Kurilov on 29.05.2018.
 //  Copyright © 2018 Pavel Kurilov. All rights reserved.
 //
 
@@ -13,6 +13,7 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
     //MARK: - Property
     private var recipes: [Recipe]?
     private var deffualtArrayRecipe: [Recipe]?
+    private var searchingArray: [Recipe]? = []
     var recipe: Recipe?
     lazy var sortingLauncher: SortingLauncher = {
         let sorted = SortingLauncher()
@@ -21,6 +22,12 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
     }()
     private let cellCollectionViewID = "cellId"
     var recipeDetail:  RecipeDetailController?
+    lazy var searchingLauncher: SearchingLauncher = {
+        let searching = SearchingLauncher()
+        return searching
+    }()
+    private var isSearhing: Bool = false
+    private var currentArray: [Recipe]? = []
     
     struct RecipesStruct: Decodable {
         
@@ -31,7 +38,6 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
     private func fetchRecipes() {
         let url = URL(string: "https://test.space-o.ru/recipes")
         URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            
             self.determiningФvailabilityOfInternet()
             
             if error != nil {
@@ -53,6 +59,7 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
                     recipe.difficulty = obj.difficulty
                     self.recipes?.append(recipe)
                 }
+                self.currentArray = self.recipes
                 self.deffualtArrayRecipe = self.recipes
                 DispatchQueue.main.async {
                     self.collectionView?.reloadData()
@@ -61,7 +68,6 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
             catch let jsonError {
                 print(jsonError)
             }
-            
         }.resume()
     }
     
@@ -75,13 +81,11 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
         }
     }
     
-    
-    //MARK: - Instructions
+    //MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchRecipes()
         navigationController?.navigationBar.isTranslucent = true
-        
         
         let titleLabel = UILabel()
         titleLabel.text = "Recipes List"
@@ -91,9 +95,10 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
         
         collectionView?.backgroundColor = UIColor.white
         collectionView!.register(RecipeCell.self, forCellWithReuseIdentifier: cellCollectionViewID)
-//        collectionView?.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
-//        collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(50, 0, 0, 0)
         
+        searchingLauncher.changeData = { [weak self] in
+            self?.showSearchingResult()
+        }
         configureView()
     }
 
@@ -106,7 +111,6 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
     private func addNavBarButtons() {
         let searchImage = UIImage(named: "search-icon")?.withRenderingMode(.alwaysOriginal)
         let searchBarButtonItem = UIBarButtonItem(image: searchImage, style: .plain, target: self, action: #selector(handleSearch))
-        
         let sortButton = UIBarButtonItem(image: UIImage(named: "sort-icon")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleSort))
         
         navigationItem.rightBarButtonItems = [searchBarButtonItem, sortButton]
@@ -133,7 +137,22 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
     }
 
     @objc private func handleSearch() {
-        print("HO HO HO")
+        
+        if isSearhing == false {
+            self.searchingLauncher.showSearchingBar()
+            self.collectionView?.contentInset = UIEdgeInsetsMake(64, 0, 0, 0)
+            self.collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(64, 0, 0, 0)
+            self.searchingLauncher.searchBar.alpha = 1
+            isSearhing = true
+        } else {
+            self.searchingLauncher.searchBar.alpha = 0
+            self.searchingLauncher.searchBar.text = ""
+            self.searchingLauncher.searchingText = ""
+            self.collectionView?.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+            self.collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+            self.searchingLauncher.searchBar.endEditing(true)
+            isSearhing = false
+        }
     }
     
     
@@ -143,6 +162,7 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
         if sorted.name == .deffault {
             recipes = self.deffualtArrayRecipe
             self.collectionView?.reloadData()
+            self.searchingLauncher.searchingText = ""
         } else if sorted.name == .date {
             let test = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
                 return recipe1.lastUpdated! < recipe2.lastUpdated!
@@ -158,16 +178,66 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
         }
     }
     
-    func showDetailForRecipe(_ recipe: Recipe) {
+    private func showSearchingResult() {
+        if currentArray != nil {
+            for obj in currentArray! {
+                if (obj.name?.contains(find: self.searchingLauncher.searchingText!))! {
+                    if !(searchingArray?.contains(obj))! {
+                        self.searchingArray?.append(obj)
+                        self.recipes = searchingArray
+                        self.collectionView?.reloadData()
+                    }
+                }
+                if obj.descriptionDetail != nil {
+                    if (obj.descriptionDetail?.contains(find: self.searchingLauncher.searchingText!))! {
+                        if !(searchingArray?.contains(obj))! {
+                            self.searchingArray?.append(obj)
+                            self.recipes = searchingArray
+                            self.collectionView?.reloadData()
+                        }
+                    }
+                }
+                if obj.instructions != nil {
+                    if (obj.instructions?.contains(find: self.searchingLauncher.searchingText!))! {
+                        if !(searchingArray?.contains(obj))! {
+                            self.searchingArray?.append(obj)
+                            self.recipes = searchingArray
+                            self.collectionView?.reloadData()
+                        }
+                    }
+                }
+            }
+            if self.searchingArray?.count == 0 {
+                self.recipes = []
+                self.collectionView?.reloadData()
+            }
+            self.searchingArray = []
+        }
+        if self.searchingLauncher.searchingText == "" {
+            self.recipes = currentArray
+//            self.collectionView?.reloadData()
+        }
+    }
+    
+    private func showDetailForRecipe(_ recipe: Recipe) {
         
         recipeDetail = RecipeDetailController()
         recipeDetail!.recipe = recipe
-
+        
+        self.searchingLauncher.searchBar.alpha = 0
+        self.searchingLauncher.searchBar.endEditing(true)
+        
+        if (isSearhing) {
+            self.collectionView?.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+            self.collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+            self.collectionView?.reloadData()
+        }
+        isSearhing = false
         self.navigationController?.pushViewController(recipeDetail!, animated: true)
     }
     
     
-    //MARK: - DELEGATE
+    //MARK: - DELEGATE and DataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return recipes?.count ?? 0
     }
@@ -190,11 +260,13 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         self.recipe = self.recipes![indexPath.item]
-        
         showDetailForRecipe(self.recipe!)
         
         print("selected \(indexPath.item)")
+    }
+    
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.searchingLauncher.searchBar.endEditing(true)
     }
 }

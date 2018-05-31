@@ -20,13 +20,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test task for the company" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="y5J-CO-I8x">
-                                <rect key="frame" x="39" y="432" width="297" height="33"/>
+                                <rect key="frame" x="39" y="461" width="297" height="34"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="scaredCat" translatesAutoresizingMaskIntoConstraints="NO" id="sku-BA-ZWG">
-                                <rect key="frame" x="-8" y="51" width="391" height="329"/>
+                                <rect key="frame" x="-8" y="80" width="391" height="329"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="329" id="tY8-RL-7Ty"/>
                                 </constraints>
@@ -39,7 +39,7 @@
                             <constraint firstItem="y5J-CO-I8x" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="39" id="rph-3Y-ovg"/>
                             <constraint firstItem="sku-BA-ZWG" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="s74-Og-hfZ"/>
                             <constraint firstItem="y5J-CO-I8x" firstAttribute="centerX" secondItem="sku-BA-ZWG" secondAttribute="centerX" id="sVW-Ma-X0D"/>
-                            <constraint firstItem="sku-BA-ZWG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="31" id="vXe-Gy-OkZ"/>
+                            <constraint firstItem="sku-BA-ZWG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="60" id="vXe-Gy-OkZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

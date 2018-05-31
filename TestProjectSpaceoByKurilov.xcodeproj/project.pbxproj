@@ -20,7 +20,8 @@
 		AB78377020AB9A0300587585 /* SortingLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376F20AB9A0300587585 /* SortingLauncher.swift */; };
 		AB78377220ABA99400587585 /* SortingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78377120ABA99400587585 /* SortingCell.swift */; };
 		AB78377420ACE4AD00587585 /* ReachabilityConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */; };
-		AB7B178520BBCF9D0016FEFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB7B178420BBCF9D0016FEFF /* Assets.xcassets */; };
+		AB7B178720BC22390016FEFF /* SearchingLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7B178620BC22390016FEFF /* SearchingLauncher.swift */; };
+		AB7B178920BFA1B40016FEFF /* Assets 10-20-53-831.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB7B178820BFA1B40016FEFF /* Assets 10-20-53-831.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +40,8 @@
 		AB78376F20AB9A0300587585 /* SortingLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingLauncher.swift; sourceTree = "<group>"; };
 		AB78377120ABA99400587585 /* SortingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingCell.swift; sourceTree = "<group>"; };
 		AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityConnect.swift; sourceTree = "<group>"; };
-		AB7B178420BBCF9D0016FEFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AB7B178620BC22390016FEFF /* SearchingLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchingLauncher.swift; sourceTree = "<group>"; };
+		AB7B178820BFA1B40016FEFF /* Assets 10-20-53-831.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets 10-20-53-831.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,8 +79,8 @@
 				AB78376720AA58C100587585 /* Controllers */,
 				AB78376120AA57BA00587585 /* Helpers */,
 				AB78374D20AA199C00587585 /* AppDelegate.swift */,
+				AB7B178820BFA1B40016FEFF /* Assets 10-20-53-831.xcassets */,
 				AB78375F20AA26B800587585 /* LaunchScreen.storyboard */,
-				AB7B178420BBCF9D0016FEFF /* Assets.xcassets */,
 				AB78375920AA199E00587585 /* Info.plist */,
 			);
 			path = TestProjectSpaceoByKurilov;
@@ -109,6 +111,7 @@
 			children = (
 				AB78374F20AA199C00587585 /* RecipesListController.swift */,
 				AB78376F20AB9A0300587585 /* SortingLauncher.swift */,
+				AB7B178620BC22390016FEFF /* SearchingLauncher.swift */,
 				AB3B02DD20AD67C0004B132D /* RecipeDetailController.swift */,
 			);
 			path = Controllers;
@@ -181,8 +184,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB7B178520BBCF9D0016FEFF /* Assets.xcassets in Resources */,
 				AB78376020AA26B800587585 /* LaunchScreen.storyboard in Resources */,
+				AB7B178920BFA1B40016FEFF /* Assets 10-20-53-831.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +200,7 @@
 				AB78377020AB9A0300587585 /* SortingLauncher.swift in Sources */,
 				AB78377220ABA99400587585 /* SortingCell.swift in Sources */,
 				AB78376E20AB1A3B00587585 /* RecipeStruct.swift in Sources */,
+				AB7B178720BC22390016FEFF /* SearchingLauncher.swift in Sources */,
 				AB78375020AA199C00587585 /* RecipesListController.swift in Sources */,
 				AB78376320AA57D800587585 /* Extensions.swift in Sources */,
 				AB3B02DE20AD67C0004B132D /* RecipeDetailController.swift in Sources */,
@@ -331,7 +335,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = R22NV699R6;
 				INFOPLIST_FILE = TestProjectSpaceoByKurilov/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -351,7 +355,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = R22NV699R6;
 				INFOPLIST_FILE = TestProjectSpaceoByKurilov/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

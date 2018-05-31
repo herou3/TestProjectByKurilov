@@ -2,7 +2,7 @@
 //  ReachabilityConnect.swift
 //  TestProjectSpaceoByKurilov
 //
-//  Created by Pavel Kurilov on 17.05.2018.
+//  Created by Pavel Kurilov on 30.05.2018.
 //  Copyright © 2018 Pavel Kurilov. All rights reserved.
 //
 
@@ -32,6 +32,5 @@ public class ReachabilityConnect {
         let ret = (isReachable && !needsConnection)
         
         return ret
-        
     }
 }

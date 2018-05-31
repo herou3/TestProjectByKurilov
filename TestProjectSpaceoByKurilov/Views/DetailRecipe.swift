@@ -119,7 +119,7 @@ class DetailRecipe: UIView {
     
     private let viewForPageController: UIView = {
         let pc = UIView()
-        pc.backgroundColor = .red
+        pc.backgroundColor = .white
         return pc
     }()
     
@@ -132,7 +132,7 @@ class DetailRecipe: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.rgb(0, 100, 0)
-        label.numberOfLines = 2
+        label.numberOfLines = 3
         return label
     }()
     
@@ -179,11 +179,11 @@ class DetailRecipe: UIView {
     
     private let instructionTextView: UITextView = {
         let textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.isScrollEnabled = false
+        textView.isScrollEnabled = true
         textView.isEditable = false
         textView.font = UIFont.systemFont(ofSize: 12)
         textView.textColor = UIColor.rgb(60, 179, 113)
+        textView.translatesAutoresizingMaskIntoConstraints = true
         return textView
     }()
     
@@ -208,6 +208,7 @@ class DetailRecipe: UIView {
     
     func setupViews() {
         
+        addSubview(instructionTextView)
         addSubview(scrollViewForImages)
         addSubview(viewForPageController)
         addSubview(nameLabel)
@@ -215,7 +216,6 @@ class DetailRecipe: UIView {
         addSubview(helpDescriptionLabel)
         addSubview(descriptionTextLabel)
         addSubview(helpInstructionLabel)
-        addSubview(instructionTextView)
         addSubview(helpDifficultyLabel)
         addSubview(difficultyStackView)
         
@@ -235,15 +235,14 @@ class DetailRecipe: UIView {
             print(intX)
         }
         
-        
-        addConstraintsWithFormat(format: "V:|-12-[v0(256)]-12-[v1(0)]-4-[v2(50)]-4-[v3(12)]-0-[v4(40)]-4-[v5(12)]-0-[v6]-4-[v7(12)]-10-[v8(60)]-4-|", views: scrollViewForImages, viewForPageController, nameLabel, helpDescriptionLabel,  descriptionTextLabel, helpInstructionLabel, instructionTextView, helpDifficultyLabel, difficultyStackView)
+        addConstraintsWithFormat(format: "V:|[v0(256)]-16-[v1(4)]-4-[v2(66)]-4-[v3(12)]-10-[v4(60)]-10-[v5(12)]-0-[v6(40)]-6-[v7(12)]-0-[v8]-6-|", views: scrollViewForImages, viewForPageController, nameLabel, helpDifficultyLabel, difficultyStackView,  helpDescriptionLabel,  descriptionTextLabel, helpInstructionLabel, instructionTextView)
         
         addConstraintsWithFormat(format: "H:|-4-[v0]-4-|", views: scrollViewForImages)
         addConstraintsWithFormat(format: "H:|-8-[v0]-8-|", views: viewForPageController)
         addConstraintsWithFormat(format: "H:|-8-[v0]-8-[v1(100)]-8-|", views: nameLabel, dateLabel)
         addConstraintsWithFormat(format: "H:|-2-[v0]|", views: helpDescriptionLabel)
         addConstraintsWithFormat(format: "H:|-4-[v0]-4-|", views: descriptionTextLabel)
-        addConstraintsWithFormat(format: "H:|-2-[v0]|", views: helpInstructionLabel)
+        addConstraintsWithFormat(format: "H:|-2-[v0]-0-|", views: helpInstructionLabel)
         addConstraintsWithFormat(format: "H:|-4-[v0]-2-|", views: instructionTextView)
         addConstraintsWithFormat(format: "H:|-2-[v0]|", views: helpDifficultyLabel)
         addConstraintsWithFormat(format: "H:|-4-[v0]-4-|", views: difficultyStackView)
@@ -251,21 +250,17 @@ class DetailRecipe: UIView {
         addConstraint(NSLayoutConstraint(item: scrollViewForImages, attribute: .height, relatedBy: .equal, toItem: scrollViewForImages, attribute: .height, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: scrollViewForImages, attribute: .width, relatedBy: .equal, toItem: scrollViewForImages, attribute: .width, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: dateLabel, attribute: .centerY, relatedBy: .equal, toItem: nameLabel, attribute: .centerY, multiplier: 1, constant: 0))
-
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init(coder!) has not been implemented")
     }
-    
-    //MARK: - DELEGATE
 }
 
+    //MARK: - DELEGATE
 extension DetailRecipe: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let p = "Начинается прокрутка"
-        print(p)
         print(scrollView.contentOffset.y)
         pageControl.currentPage = currentPageIndex()
     }
@@ -276,5 +271,4 @@ extension DetailRecipe: UIScrollViewDelegate {
         }
         return Int(round(self.scrollViewForImages.contentOffset.x / self.scrollViewForImages.bounds.size.width))
     }
-    
 }

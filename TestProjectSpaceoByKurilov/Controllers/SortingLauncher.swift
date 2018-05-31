@@ -2,7 +2,7 @@
 //  SortingLauncher.swift
 //  TestProjectSpaceoByKurilov
 //
-//  Created by Pavel Kurilov on 16.05.2018.
+//  Created by Pavel Kurilov on 29.05.2018.
 //  Copyright © 2018 Pavel Kurilov. All rights reserved.
 //
 
@@ -48,6 +48,8 @@ class SortingLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDel
     }()
     var recipesListController: RecipesListController?
     
+    
+    //MARK: - Methods
     func showSortingVariation() {
         
         if let window = UIApplication.shared.keyWindow {
@@ -88,7 +90,7 @@ class SortingLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDel
         }
     }
     
-    //MARK: - DELEGATES
+    //MARK: - DELEGATES And DataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sortings.count
     }
