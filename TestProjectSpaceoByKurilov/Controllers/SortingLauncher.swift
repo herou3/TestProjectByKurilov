@@ -11,7 +11,6 @@ import UIKit
 class Sorting: NSObject {
     let name: SortingName
     let imageView: String
-    
     init(name: SortingName, imageView: String) {
         self.name = name
         self.imageView = imageView
@@ -47,7 +46,6 @@ class SortingLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDel
         return [ Sorting(name: .deffault, imageView: "default-icon"), Sorting(name: .name, imageView: "nameSorted-icon"), Sorting(name: .date, imageView: "dateSorted-icon")]
     }()
     var recipesListController: RecipesListController?
-    
     
     //MARK: - Methods
     func showSortingVariation() {

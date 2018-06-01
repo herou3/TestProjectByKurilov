@@ -11,8 +11,8 @@ import UIKit
 class DetailRecipe: UIView {
     
     //MARK: - Property
-    var scrollSize: Int?
-    var imageViewRect: CGRect?
+    var scrollSize: Int = 0
+    var imageViewRect: CGRect = CGRect()
     var pageControl = UIPageControl()
     var recipe: Recipe? {
         didSet {
@@ -22,6 +22,8 @@ class DetailRecipe: UIView {
                 setupRecipeImage()
                 if recipe?.images?.count != 0 {
                     pageControl.numberOfPages = (recipe?.images?.count)!
+                } else {
+                    print("test")
                 }
             } else {
                 recipeImageView.image = UIImage(named: "deffualt")
@@ -31,11 +33,9 @@ class DetailRecipe: UIView {
             } else {
                 descriptionTextLabel.text = recipe?.descriptionDetail
             }
-           
             if recipe?.difficulty != nil {
                 setupDifficultyStatus()
             }
-            
             instructionTextView.text = recipe?.instructions?.replacingOccurrences(of: "<br>", with: "\n")
             
             if recipe?.lastUpdated != 0 {
@@ -46,7 +46,9 @@ class DetailRecipe: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        scrollSize = recipe?.images?.count
+        if recipe?.images != nil {
+            scrollSize = (recipe?.images?.count)!
+        }
         setupViews()
         self.scrollViewForImages.contentSize = CGSize(width: self.bounds.size.width * 5, height: self.bounds.size.height / 4)
         pageControl.pageIndicatorTintColor = UIColor.lightGray

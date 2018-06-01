@@ -29,11 +29,6 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
     private var isSearhing: Bool = false
     private var currentArray: [Recipe]? = []
     
-    struct RecipesStruct: Decodable {
-        
-        let recipes: [RecipeStruct]
-    }
-    
     //MARK: - Work API
     private func fetchRecipes() {
         let url = URL(string: "https://test.space-o.ru/recipes")
@@ -59,7 +54,7 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
                     recipe.difficulty = obj.difficulty
                     self.recipes?.append(recipe)
                 }
-                self.currentArray = self.recipes
+                self.currentArray = self.recipes!
                 self.deffualtArrayRecipe = self.recipes
                 DispatchQueue.main.async {
                     self.collectionView?.reloadData()
@@ -132,7 +127,13 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
 
     //MARK: - Selectors
     @objc private func handleSort() {
-        
+        if isSearhing {
+            self.searchingLauncher.searchBar.alpha = 0
+            self.searchingLauncher.searchBar.endEditing(true)
+            self.collectionView?.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+            self.collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+            isSearhing = false
+        }
         sortingLauncher.showSortingVariation()
     }
 
@@ -161,19 +162,26 @@ class RecipesListController: UICollectionViewController, UICollectionViewDelegat
         
         if sorted.name == .deffault {
             recipes = self.deffualtArrayRecipe
-            self.collectionView?.reloadData()
+            self.currentArray = self.deffualtArrayRecipe
             self.searchingLauncher.searchingText = ""
+            self.searchingLauncher.searchBar.text = ""
         } else if sorted.name == .date {
-            let test = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
+            let sortedByDate = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
                 return recipe1.lastUpdated! < recipe2.lastUpdated!
             })
-            recipes = test
+            self.currentArray = currentArray?.sorted(by: { (recipe1, recipe2) -> Bool in
+                return recipe1.lastUpdated! < recipe2.lastUpdated!
+            })
+            recipes = sortedByDate
             self.collectionView?.reloadData()
         } else {
-            let test = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
+            let SortedByName = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
                 return recipe1.name! < recipe2.name!
             })
-            recipes = test
+            self.currentArray = currentArray?.sorted(by: { (recipe1, recipe2) -> Bool in
+                return recipe1.name! < recipe2.name!
+            })
+            recipes = SortedByName
             self.collectionView?.reloadData()
         }
     }

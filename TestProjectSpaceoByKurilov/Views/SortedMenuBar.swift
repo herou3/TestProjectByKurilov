@@ -41,7 +41,7 @@ class SortedMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegat
     
     //MARK: - Delegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return imageNames.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

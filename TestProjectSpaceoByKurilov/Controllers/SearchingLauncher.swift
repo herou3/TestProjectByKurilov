@@ -8,8 +8,7 @@
 
 import UIKit
 
-class SearchingLauncher: NSObject, UISearchBarDelegate {
-    
+class SearchingLauncher: NSObject {
     
     override init() {
         super.init()
@@ -20,7 +19,6 @@ class SearchingLauncher: NSObject, UISearchBarDelegate {
     var searchBar: UISearchBar = {
        var sb = UISearchBar(frame: .zero)
         sb.setStyleColor(UIColor.rgb(65,155,65))
-        //sb.setBackgroundImage(UIImage(named: "pizza"), for: UIBarPosition.top, barMetrics: UIBarMetrics.default)
         return sb
     }()
     var changeData = {() -> () in }
@@ -32,7 +30,6 @@ class SearchingLauncher: NSObject, UISearchBarDelegate {
     
     //MARK: - Method
     func showSearchingBar() {
-        
          if let window = UIApplication.shared.keyWindow {
             window.addSubview(searchBar)
             
@@ -45,9 +42,11 @@ class SearchingLauncher: NSObject, UISearchBarDelegate {
             }, completion: nil)
         }
     }
-    
-    
-    //MARK: - DELEGATE
+}
+
+//MARK: - DELEGATE
+extension SearchingLauncher: UISearchBarDelegate {
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.searchingText = searchText
         print(searchText)

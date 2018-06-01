@@ -22,6 +22,7 @@
 		AB78377420ACE4AD00587585 /* ReachabilityConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */; };
 		AB7B178720BC22390016FEFF /* SearchingLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7B178620BC22390016FEFF /* SearchingLauncher.swift */; };
 		AB7B178920BFA1B40016FEFF /* Assets 10-20-53-831.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB7B178820BFA1B40016FEFF /* Assets 10-20-53-831.xcassets */; };
+		AB7B178B20C124450016FEFF /* RecipesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7B178A20C124440016FEFF /* RecipesStruct.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityConnect.swift; sourceTree = "<group>"; };
 		AB7B178620BC22390016FEFF /* SearchingLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchingLauncher.swift; sourceTree = "<group>"; };
 		AB7B178820BFA1B40016FEFF /* Assets 10-20-53-831.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets 10-20-53-831.xcassets"; sourceTree = "<group>"; };
+		AB7B178A20C124440016FEFF /* RecipesStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesStruct.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 			children = (
 				AB78376B20AA7F8000587585 /* Recipe.swift */,
 				AB78376D20AB1A3B00587585 /* RecipeStruct.swift */,
+				AB7B178A20C124440016FEFF /* RecipesStruct.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -200,6 +203,7 @@
 				AB78377020AB9A0300587585 /* SortingLauncher.swift in Sources */,
 				AB78377220ABA99400587585 /* SortingCell.swift in Sources */,
 				AB78376E20AB1A3B00587585 /* RecipeStruct.swift in Sources */,
+				AB7B178B20C124450016FEFF /* RecipesStruct.swift in Sources */,
 				AB7B178720BC22390016FEFF /* SearchingLauncher.swift in Sources */,
 				AB78375020AA199C00587585 /* RecipesListController.swift in Sources */,
 				AB78376320AA57D800587585 /* Extensions.swift in Sources */,

@@ -43,10 +43,9 @@ class RecipeCell: BaseCell {
     }
     //MARK: - Methods
     private func setupRecipeImage() {
-        if let recipeImageViewURL = recipe?.images {
-            //for imageURL in recipeImageViewURL {
-                let url = URL(string: recipeImageViewURL[0])
-                URLSession.shared.dataTask(with: url!) { (data, response, error) in
+        if (recipe?.images) != nil {
+            if let recipeImageViewURL: URL = URL(string: (recipe?.images?.first)!) {
+                URLSession.shared.dataTask(with: recipeImageViewURL) { (data, response, error) in
                     if error != nil {
                         print(error ?? "Error")
                         return
@@ -55,7 +54,7 @@ class RecipeCell: BaseCell {
                         self.recipeImageView.image = UIImage(data: data!)
                     }
                 }.resume()
-           // }
+            }
         }
     }
     
@@ -84,8 +83,8 @@ class RecipeCell: BaseCell {
     //MARK: - Create UIView for cell
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
     }
+    
     
     private let recipeImageView: UIImageView = {
         let imageView = UIImageView()

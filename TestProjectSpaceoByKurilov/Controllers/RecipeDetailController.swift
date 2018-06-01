@@ -11,7 +11,6 @@ import UIKit
 class RecipeDetailController: UIViewController {
     
     //MARK: - Property
-    var recipesListController: RecipesListController?
     var recipe: Recipe?
     var details: DetailRecipe?
     var scrollView: UIScrollView?
