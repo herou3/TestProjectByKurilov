@@ -8,21 +8,21 @@
 
 import UIKit
 
-//MARK: - Extension UIColor
+// MARK: - Extension UIColor
 extension UIColor {
     static func rgb(_ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) -> UIColor {
         return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1)
     }
 }
 
-//MARK: - Extension UISearchBar
+// MARK: - Extension UISearchBar
 public extension UISearchBar {
     public func setStyleColor(_ color: UIColor) {
         tintColor = color
         let image: UIImage = UIImage(named: "deffualt")!
-        guard let tf = (value(forKey: "searchField") as? UITextField) else { return }
-        tf.textColor = color
-        if let glassIconView = tf.leftView as? UIImageView, let img = glassIconView.image {
+        guard let textField = (value(forKey: "searchField") as? UITextField) else { return }
+        textField.textColor = color
+        if let glassIconView = textField.leftView as? UIImageView, let img = glassIconView.image {
             let newImg = img.blendedByColor(color)
             glassIconView.image = newImg
         }
@@ -30,9 +30,8 @@ public extension UISearchBar {
     }
 }
 
-//MARK: - Extension UIImage
+// MARK: - Extension UIImage
 extension UIImage {
-    
     public func blendedByColor(_ color: UIColor) -> UIImage! {
         let scale = UIScreen.main.scale
         if scale > 1 {
@@ -50,17 +49,17 @@ extension UIImage {
     }
 }
 
-//MARK: - Extension String
+// MARK: - Extension String
 extension String {
-    func contains(find: String) -> Bool{
+    func contains(find: String) -> Bool {
         return self.range(of: find) != nil
     }
-    func containsIgnoringCase(find: String) -> Bool{
+    func containsIgnoringCase(find: String) -> Bool {
         return self.range(of: find, options: .caseInsensitive) != nil
     }
 }
 
-//MARK: - Extension UIView
+// MARK: - Extension UIView
 extension UIView {
     func addConstraintsWithFormat(format: String, views: UIView...) {
         var viewDictionary = [String: UIView]()

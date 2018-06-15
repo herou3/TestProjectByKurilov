@@ -9,31 +9,24 @@
 import UIKit
 
 class SortingCell: BaseCell {
-    
-    //MARK: - Focused
+// MARK: - Focused
     override var isHighlighted: Bool {
         didSet {
             backgroundColor = isHighlighted ? UIColor.white : UIColor.rgb(34, 139, 34)
-            
             nameLabel.textColor = isHighlighted ? UIColor.rgb(34, 139, 34) : UIColor.white
             iconImageView.tintColor = isHighlighted ? UIColor.rgb(34, 139, 34) : UIColor.white
         }
     }
-    
-    //MARK: - SetupViews
+// MARK: - SetupViews
     override func setupViews() {
         super.setupViews()
-        
         backgroundColor = UIColor.rgb(34, 139, 34)
-        
         addSubview(nameLabel)
         addSubview(iconImageView)
-        
         addConstraintsWithFormat(format: "H:|-10-[v0(30)]-10-[v1]|", views: iconImageView, nameLabel)
         addConstraintsWithFormat(format: "V:|[v0]|", views: nameLabel)
         addConstraintsWithFormat(format: "V:|-10-[v0(30)]-10-|", views: iconImageView)
     }
-    
     var sorting: Sorting? {
         didSet {
             nameLabel.text = (sorting?.name).map { $0.rawValue }
@@ -41,8 +34,7 @@ class SortingCell: BaseCell {
             iconImageView.tintColor = UIColor.white
         }
     }
-    
-    //MARK: - UIElements
+    // MARK: - UIElements
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "String"

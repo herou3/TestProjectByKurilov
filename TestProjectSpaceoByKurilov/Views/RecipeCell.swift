@@ -14,17 +14,27 @@ class BaseCell: UICollectionViewCell {
         super.init(frame: frame)
         setupViews()
     }
-    
     func setupViews() {
     }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init(coder!) has not been implemented")
     }
 }
 
+class DefaultCell: UITableViewCell {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: "StelID")
+        setupViews()
+    }
+    func setupViews() {
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
 class RecipeCell: BaseCell {
-    
     var recipe: Recipe? {
         didSet {
             nameLabel.text = recipe?.name
@@ -41,11 +51,11 @@ class RecipeCell: BaseCell {
             }
         }
     }
-    //MARK: - Methods
+// MARK: - Methods
     private func setupRecipeImage() {
         if (recipe?.images) != nil {
             if let recipeImageViewURL: URL = URL(string: (recipe?.images?.first)!) {
-                URLSession.shared.dataTask(with: recipeImageViewURL) { (data, response, error) in
+                URLSession.shared.dataTask(with: recipeImageViewURL) { (data, _, error) in
                     if error != nil {
                         print(error ?? "Error")
                         return
@@ -57,7 +67,6 @@ class RecipeCell: BaseCell {
             }
         }
     }
-    
     private func setupDifficultyStatus() {
         switch recipe?.difficulty {
         case 1:
@@ -79,13 +88,10 @@ class RecipeCell: BaseCell {
             difficultyLabel.text = "0"
         }
     }
-    
-    //MARK: - Create UIView for cell
+// MARK: - Create UIView for cell
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
-    
     private let recipeImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "image-not-found")
@@ -94,14 +100,12 @@ class RecipeCell: BaseCell {
         imageView.clipsToBounds = true
         return imageView
     }()
-    
     private let lineView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.rgb(143,188,143)
+        view.backgroundColor = UIColor.rgb(143, 188, 143)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     private let difficultyLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = UIColor.rgb(34, 139, 34)
@@ -113,7 +117,6 @@ class RecipeCell: BaseCell {
         label.layer.masksToBounds = true
         return label
     }()
-    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -121,34 +124,35 @@ class RecipeCell: BaseCell {
         label.text = "Суши филадельфия"
         return label
     }()
-    
     private let descriptionTextLabel: UILabel = {
         let textLabel = UILabel()
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.text? = "Суши обернутые лососем, внутри - рис, творожный сыр, огурец и авакадо. Подаются прохладными. Являются востребованным блюдом во всех японских ресторанах"
-        //textView.textContainerInset = UIEdgeInsetsMake(0, -4, 0, 0)
+        textLabel.text? = "Суши обернутые лососем, внутри - рис, творожный сыр, огурец и авакадо"
         textLabel.textColor = UIColor.rgb(60, 179, 113)
         textLabel.font = UIFont.systemFont(ofSize: 12)
         textLabel.numberOfLines = 2
-        //textView.isEditable = false
         return textLabel
     }()
-    
     override func setupViews() {
         addSubview(recipeImageView)
         addSubview(lineView)
         addSubview(difficultyLabel)
         addSubview(nameLabel)
         addSubview(descriptionTextLabel)
-        
         addConstraintsWithFormat(format: "H:|-16-[v0]-16-|", views: recipeImageView)
         addConstraintsWithFormat(format: "H:|-16-[v0(44)]", views: difficultyLabel)
         addConstraintsWithFormat(format: "H:|[v0]|", views: lineView)
-        
         //Vertical constraint
-        addConstraintsWithFormat(format: "V:|-16-[v0]-8-[v1(44)]-16-[v2(1)]|", views: recipeImageView, difficultyLabel, lineView)
+        addConstraintsWithFormat(format: "V:|-16-[v0]-8-[v1(44)]-16-[v2(1)]|",
+                                 views: recipeImageView, difficultyLabel, lineView)
         //Top constraint
-        addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .top, relatedBy: .equal, toItem: recipeImageView, attribute: .bottom, multiplier: 1, constant: 8))
+        addConstraint(NSLayoutConstraint(item: nameLabel,
+                                         attribute: .top,
+                                         relatedBy: .equal,
+                                         toItem: recipeImageView,
+                                         attribute: .bottom,
+                                         multiplier: 1,
+                                         constant: 8))
         addConstraint(NSLayoutConstraint(item: descriptionTextLabel, attribute: .top, relatedBy: .equal, toItem: nameLabel, attribute: .bottom, multiplier: 1, constant: 4))
         //Left constraint
         addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .left, relatedBy: .equal, toItem: difficultyLabel, attribute: .right, multiplier: 1, constant: 8))
@@ -160,7 +164,6 @@ class RecipeCell: BaseCell {
         addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 20))
         addConstraint(NSLayoutConstraint(item: descriptionTextLabel, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 30))
     }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init(coder!) has not been implemented")
     }

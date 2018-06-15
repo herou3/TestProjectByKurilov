@@ -18,67 +18,62 @@ class Sorting: NSObject {
 }
 
 enum SortingName: String {
-    case deffault = "Sort by deffault"
+    case defaultSort = "Sort by default"
     case name = "Sort by name"
     case date = "Sort by date"
 }
 
 class SortingLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
     override init() {
         super.init()
         collectionView.delegate = self
         collectionView.dataSource = self
-        
         collectionView.register(SortingCell.self, forCellWithReuseIdentifier: cellID)
     }
-    
-    //MARK: - Property
+// MARK: - Property
     private let shadowView = UIView()
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .white
-        return cv
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.backgroundColor = .white
+        return collection
     }()
     private let cellID = "cellID"
     private let sortings: [Sorting] = {
-        return [ Sorting(name: .deffault, imageView: "default-icon"), Sorting(name: .name, imageView: "nameSorted-icon"), Sorting(name: .date, imageView: "dateSorted-icon")]
+        return [ Sorting(name: .defaultSort,
+                         imageView: "default-icon"),
+                 Sorting(name: .name, imageView: "nameSorted-icon"),
+                 Sorting(name: .date, imageView: "dateSorted-icon")]
     }()
     var recipesListController: RecipesListController?
-    
-    //MARK: - Methods
+// MARK: - Methods
     func showSortingVariation() {
-        
         if let window = UIApplication.shared.keyWindow {
             shadowView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-            
             shadowView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDissMiss)))
-            
             window.addSubview(shadowView)
             window.addSubview(collectionView)
-            
             let height: CGFloat = 150.0
-            let y = window.frame.height - height
+            let indentation = window.frame.height - height
             collectionView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: height)
-            
             shadowView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: window.frame.height)
             shadowView.alpha = 0
             collectionView.alpha = 1
-            
-            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.25,
+                           delay: 0,
+                           usingSpringWithDamping: 1,
+                           initialSpringVelocity: 1,
+                           options: .curveEaseOut,
+                           animations: {
                 self.shadowView.alpha = 1
-                
-                self.collectionView.frame = CGRect(x: 0, y: y, width: self.collectionView.frame.width, height: height)
+                self.collectionView.frame = CGRect(x: 0, y: indentation, width: self.collectionView.frame.width, height: height)
             }, completion: nil)
         }
     }
-    
-    //MARK: - selectors
+// MARK: - selectors
     @objc private func handleDissMiss() {
-        UIView.animate(withDuration: 1) {
+        UIView.animate(withDuration: 0.25) {
             self.shadowView.alpha = 0
-            
             if let window = UIApplication.shared.keyWindow {
                 self.collectionView.frame = CGRect(x: 0, y: window.frame.height,
                                                    width: window.frame.width,
@@ -87,35 +82,36 @@ class SortingLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDel
             self.collectionView.alpha = 0
         }
     }
-    
-    //MARK: - DELEGATES And DataSource
+// MARK: - DELEGATES And DataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sortings.count
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! SortingCell
-        
         let sortByDeffualt = sortings[indexPath.item]
         cell.sorting = sortByDeffualt
-        
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 50)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       usingSpringWithDamping: 0.25,
+                       initialSpringVelocity: 0.25,
+                       options: .curveEaseInOut,
+                       animations: {
             self.shadowView.alpha = 0
-            
             if let window = UIApplication.shared.keyWindow {
                 self.collectionView.frame = CGRect(x: 0, y: window.frame.height,
                                                    width: window.frame.width,
@@ -123,7 +119,6 @@ class SortingLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDel
             }
             self.collectionView.alpha = 0
         }) { (completed: Bool) in
-            
             let sortred = self.sortings[indexPath.item]
             self.recipesListController?.showControllesForSorted(sorted: sortred)
         }

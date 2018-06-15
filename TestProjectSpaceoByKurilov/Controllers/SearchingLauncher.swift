@@ -9,53 +9,49 @@
 import UIKit
 
 class SearchingLauncher: NSObject {
-    
     override init() {
         super.init()
         searchBar.delegate = self
     }
-    
-    //MARK: - Property
+// MARK: - Property
     var searchBar: UISearchBar = {
-       var sb = UISearchBar(frame: .zero)
-        sb.setStyleColor(UIColor.rgb(65,155,65))
-        return sb
+        var search = UISearchBar(frame: .zero)
+        search.setStyleColor(UIColor.rgb(65, 155, 65))
+        return search
     }()
-    var changeData = {() -> () in }
-    var searchingText: String? = ""  {
+    var changeData = { () -> () in }
+    var searchingText: String? = "" {
         didSet {
             changeData()
         }
     }
-    
-    //MARK: - Method
+// MARK: - Method
     func showSearchingBar() {
          if let window = UIApplication.shared.keyWindow {
             window.addSubview(searchBar)
-            
             let height: CGFloat = 64
             searchBar.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: height)
-            
-            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                
+            UIView.animate(withDuration: 0.35,
+                           delay: 0,
+                           usingSpringWithDamping: 0,
+                           initialSpringVelocity: 0,
+                           options: .curveEaseOut,
+                           animations: {
                 self.searchBar.frame = CGRect(x: 0, y: height, width: self.searchBar.frame.width, height: height)
             }, completion: nil)
         }
     }
 }
 
-//MARK: - DELEGATE
+// MARK: - DELEGATE
 extension SearchingLauncher: UISearchBarDelegate {
-
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.searchingText = searchText
         print(searchText)
     }
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
-    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }

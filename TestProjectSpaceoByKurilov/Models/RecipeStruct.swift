@@ -9,12 +9,11 @@
 import Foundation
 
 struct RecipeStruct: Codable {
-    
     var uuid: String?
     var name: String?
     var images: [String]?
     var lastUpdated: Int?
     var description: String?
     var instructions: String?
-    var difficulty: Int?
+    var difficulty: Int? // Можно было сделать Enum, но я принял решение оставить так
 }

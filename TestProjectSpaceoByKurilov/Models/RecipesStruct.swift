@@ -9,6 +9,5 @@
 import Foundation
 
 struct RecipesStruct: Decodable {
-    
     let recipes: [RecipeStruct]
 }
