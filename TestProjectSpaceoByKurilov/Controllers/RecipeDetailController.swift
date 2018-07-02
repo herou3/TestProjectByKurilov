@@ -6,13 +6,20 @@
 //  Copyright © 2018 Pavel Kurilov. All rights reserved.
 //
 
-import UIKit
+import LBTAComponents
 
 class RecipeDetailController: UIViewController {
 // MARK: - Property
-    public var recipe: Recipe = Recipe()
+    public var recipe: Recipe
     private var scrollView: UIScrollView = UIScrollView()
 // MARK: - Init
+    init(recipe: Recipe) {
+        self.recipe = recipe
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         let titleLabel = UILabel()
@@ -22,11 +29,17 @@ class RecipeDetailController: UIViewController {
         navigationItem.titleView = titleLabel
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.tintColor = .white
-        print(recipe)
-        let details = DetailRecipe(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
+        let details = DetailRecipeView(frame: CGRect(x: self.view.bounds.minX,
+                                                     y: self.view.bounds.minY,
+                                                     width: view.bounds.width,
+                                                     height: view.bounds.height))
         details.recipe = recipe
-        scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
-        scrollView.contentSize = CGSize(width: self.view.bounds.size.width, height: self.view.frame.size.height)
+        scrollView = UIScrollView(frame: CGRect(x: self.scrollView.bounds.minX,
+                                                y: self.scrollView.bounds.minY,
+                                                width: view.bounds.width,
+                                                height: view.bounds.height))
+        scrollView.contentSize = CGSize(width: self.view.bounds.size.width,
+                                        height: self.view.frame.size.height)
 
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(details)

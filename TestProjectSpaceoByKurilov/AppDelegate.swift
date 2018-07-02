@@ -17,10 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.makeKeyAndVisible()
-        let layout = UICollectionViewFlowLayout()
-        self.window?.rootViewController = UINavigationController(rootViewController: RecipesListController(collectionViewLayout: layout))
+        self.window?.rootViewController = UINavigationController(rootViewController: RecipesListController())
         // get rid of black bar underneath navbar
-        UINavigationBar.appearance().barTintColor = UIColor.rgb(34, 139, 34)
+        UINavigationBar.appearance().barTintColor = UIColor.appPrimary
         UINavigationBar.appearance().shadowImage = UIImage()
         application.statusBarStyle = .lightContent
         return true

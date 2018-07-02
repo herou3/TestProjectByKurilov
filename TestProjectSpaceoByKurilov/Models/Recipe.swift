@@ -1,5 +1,5 @@
 //
-//  Recipe.swift
+//  RecipeStruct.swift
 //  TestProjectSpaceoByKurilov
 //
 //  Created by Pavel Kurilov on 29.05.2018.
@@ -7,31 +7,25 @@
 //
 
 import UIKit
+import SwiftyJSON
+import TRON
 
-class Recipe: NSObject {
+struct Recipe: Codable {
     var uuid: String?
     var name: String?
     var images: [String]?
     var lastUpdated: Int?
-    var descriptionDetail: String?
+    var description: String?
     var instructions: String?
     var difficulty: Int?
-    override init() {
+    init(json: JSON) {
+        self.name = json["name"].stringValue
+        self.uuid = json["uuid"].stringValue
+        self.images = json["images"].arrayObject as? [String]
+        self.lastUpdated = json["lastUpdated"].intValue
+        self.description = json["description"].stringValue
+        self.instructions = json["instructions"].stringValue
+        self.difficulty = json["difficulty"].intValue
     }
-    init(uuid: String,
-         name: String,
-         images: [String],
-         lastUpdated: Int,
-         descriptionDetail: String,
-         instructions: String,
-         difficulty: Int) {
-        super.init()
-        self.uuid = uuid
-        self.name = name
-        self.images = images
-        self.lastUpdated = lastUpdated
-        self.descriptionDetail = descriptionDetail
-        self.instructions = instructions
-        self.difficulty = difficulty
-    }
+    init() { }
 }

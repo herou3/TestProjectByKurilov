@@ -6,20 +6,7 @@
 //  Copyright © 2018 Pavel Kurilov. All rights reserved.
 //
 
-import Foundation
-import UIKit
-
-class BaseCell: UICollectionViewCell {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-    func setupViews() {
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("Init(coder!) has not been implemented")
-    }
-}
+import LBTAComponents
 
 class DefaultCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -33,17 +20,16 @@ class DefaultCell: UITableViewCell {
     }
 }
 
-
-class RecipeCell: BaseCell {
+class RecipeCell: DefaultCell {
     var recipe: Recipe? {
         didSet {
             nameLabel.text = recipe?.name
-            if recipe?.images != nil {
-                setupRecipeImage()
+            if recipe?.images != nil && recipe?.images != [] {
+                recipeImageView.loadImage(urlString: (recipe?.images?.first)!)
             } else {
                 recipeImageView.image = UIImage(named: "deffualt")
             }
-            descriptionTextLabel.text = recipe?.descriptionDetail
+            descriptionTextLabel.text = recipe?.description
             if recipe?.difficulty != nil {
                 setupDifficultyStatus()
             } else {
@@ -52,48 +38,33 @@ class RecipeCell: BaseCell {
         }
     }
 // MARK: - Methods
-    private func setupRecipeImage() {
-        if (recipe?.images) != nil {
-            if let recipeImageViewURL: URL = URL(string: (recipe?.images?.first)!) {
-                URLSession.shared.dataTask(with: recipeImageViewURL) { (data, _, error) in
-                    if error != nil {
-                        print(error ?? "Error")
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        self.recipeImageView.image = UIImage(data: data!)
-                    }
-                }.resume()
-            }
-        }
-    }
     private func setupDifficultyStatus() {
         switch recipe?.difficulty {
         case 1:
             difficultyLabel.text = "1"
-            difficultyLabel.backgroundColor = UIColor.rgb(173, 255, 47)
+            difficultyLabel.backgroundColor = UIColor.paleRaiting
         case 2:
             difficultyLabel.text = "2"
-            difficultyLabel.backgroundColor = UIColor.rgb(124, 252, 0)
+            difficultyLabel.backgroundColor = UIColor.paleRaiting
         case 3:
             difficultyLabel.text = "3"
-            difficultyLabel.backgroundColor = UIColor.rgb(124, 252, 0)
+            difficultyLabel.backgroundColor = UIColor.averageRaiting
         case 4:
             difficultyLabel.text = "4"
-            difficultyLabel.backgroundColor = UIColor.rgb(60, 179, 113)
+            difficultyLabel.backgroundColor = UIColor.murkyRating
         case 5:
             difficultyLabel.text = "5"
-            difficultyLabel.backgroundColor = UIColor.rgb(0, 100, 0)
+            difficultyLabel.backgroundColor = UIColor.darkGreen
         default:
             difficultyLabel.text = "0"
         }
     }
 // MARK: - Create UIView for cell
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
-    private let recipeImageView: UIImageView = {
-        let imageView = UIImageView()
+    private let recipeImageView: CachedImageView = {
+        let imageView = CachedImageView()
         imageView.image = UIImage(named: "image-not-found")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
@@ -102,13 +73,13 @@ class RecipeCell: BaseCell {
     }()
     private let lineView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.rgb(143, 188, 143)
+        view.backgroundColor = UIColor.dividingLine
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     private let difficultyLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = UIColor.rgb(34, 139, 34)
+        label.backgroundColor = UIColor.appPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "4"
         label.textColor = UIColor.white
@@ -120,18 +91,19 @@ class RecipeCell: BaseCell {
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.rgb(0, 100, 0)
+        label.textColor = UIColor.darkGreen
         label.text = "Суши филадельфия"
+        label.numberOfLines = 2
         return label
     }()
-    private let descriptionTextLabel: UILabel = {
-        let textLabel = UILabel()
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.text? = "Суши обернутые лососем, внутри - рис, творожный сыр, огурец и авакадо"
-        textLabel.textColor = UIColor.rgb(60, 179, 113)
-        textLabel.font = UIFont.systemFont(ofSize: 12)
-        textLabel.numberOfLines = 2
-        return textLabel
+    private let descriptionTextLabel: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.text? = "Суши обернутые лососем, внутри - рис, творожный сыр"
+        textView.textColor = UIColor.descriptionText
+        textView.font = UIFont.systemFont(ofSize: 12)
+        textView.isEditable = false
+        return textView
     }()
     override func setupViews() {
         addSubview(recipeImageView)
@@ -139,30 +111,55 @@ class RecipeCell: BaseCell {
         addSubview(difficultyLabel)
         addSubview(nameLabel)
         addSubview(descriptionTextLabel)
-        addConstraintsWithFormat(format: "H:|-16-[v0]-16-|", views: recipeImageView)
-        addConstraintsWithFormat(format: "H:|-16-[v0(44)]", views: difficultyLabel)
-        addConstraintsWithFormat(format: "H:|[v0]|", views: lineView)
-        //Vertical constraint
-        addConstraintsWithFormat(format: "V:|-16-[v0]-8-[v1(44)]-16-[v2(1)]|",
-                                 views: recipeImageView, difficultyLabel, lineView)
-        //Top constraint
-        addConstraint(NSLayoutConstraint(item: nameLabel,
-                                         attribute: .top,
-                                         relatedBy: .equal,
-                                         toItem: recipeImageView,
-                                         attribute: .bottom,
-                                         multiplier: 1,
-                                         constant: 8))
-        addConstraint(NSLayoutConstraint(item: descriptionTextLabel, attribute: .top, relatedBy: .equal, toItem: nameLabel, attribute: .bottom, multiplier: 1, constant: 4))
-        //Left constraint
-        addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .left, relatedBy: .equal, toItem: difficultyLabel, attribute: .right, multiplier: 1, constant: 8))
-        addConstraint(NSLayoutConstraint(item: descriptionTextLabel, attribute: .left, relatedBy: .equal, toItem: difficultyLabel, attribute: .right, multiplier: 1, constant: 8))
-        //Right constraint
-        addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .right, relatedBy: .equal, toItem: recipeImageView, attribute: .right, multiplier: 1, constant: 0))
-        addConstraint(NSLayoutConstraint(item: descriptionTextLabel, attribute: .right, relatedBy: .equal, toItem: recipeImageView, attribute: .right, multiplier: 1, constant: 0))
-        //Height constraint
-        addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 20))
-        addConstraint(NSLayoutConstraint(item: descriptionTextLabel, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 30))
+        recipeImageView.anchor(self.topAnchor,
+                               left: self.leftAnchor,
+                               bottom: self.bottomAnchor,
+                               right: nil, topConstant: 16,
+                               leftConstant: 16,
+                               bottomConstant: 16,
+                               rightConstant: 0,
+                               widthConstant: 150,
+                               heightConstant: 202)
+        difficultyLabel.anchor(recipeImageView.topAnchor,
+                               left: recipeImageView.leftAnchor,
+                               bottom: nil,
+                               right: nil,
+                               topConstant: 0,
+                               leftConstant: 0,
+                               bottomConstant: 0,
+                               rightConstant: 0,
+                               widthConstant: 40,
+                               heightConstant: 40)
+        nameLabel.anchor(recipeImageView.topAnchor,
+                         left: recipeImageView.rightAnchor,
+                         bottom: nil,
+                         right: self.rightAnchor,
+                         topConstant: 0,
+                         leftConstant: 8,
+                         bottomConstant: 0,
+                         rightConstant: 16,
+                         widthConstant: 0,
+                         heightConstant: 44)
+        descriptionTextLabel.anchor(nameLabel.bottomAnchor,
+                                    left: recipeImageView.rightAnchor,
+                                    bottom: self.bottomAnchor,
+                                    right: self.rightAnchor,
+                                    topConstant: 8,
+                                    leftConstant: 8,
+                                    bottomConstant: 16,
+                                    rightConstant: 16,
+                                    widthConstant: 0,
+                                    heightConstant: 0)
+        lineView.anchor(nil,
+                        left: self.leftAnchor,
+                        bottom: self.bottomAnchor,
+                        right: self.rightAnchor,
+                        topConstant: 0,
+                        leftConstant: 0,
+                        bottomConstant: 0,
+                        rightConstant: 0,
+                        widthConstant: 0,
+                        heightConstant: 2)
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init(coder!) has not been implemented")
