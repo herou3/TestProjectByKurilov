@@ -9,17 +9,21 @@
 import LBTAComponents
 
 class RecipeDetailController: UIViewController {
+    
 // MARK: - Property
     public var recipe: Recipe
     private var scrollView: UIScrollView = UIScrollView()
+    
 // MARK: - Init
     init(recipe: Recipe) {
         self.recipe = recipe
         super.init(nibName: nil, bundle: nil)
     }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let titleLabel = UILabel()
@@ -29,27 +33,36 @@ class RecipeDetailController: UIViewController {
         navigationItem.titleView = titleLabel
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.tintColor = .white
-        let details = DetailRecipeView(frame: CGRect(x: self.view.bounds.minX,
-                                                     y: self.view.bounds.minY,
+        let details = DetailRecipeView(frame: CGRect(x: view.bounds.minX,
+                                                     y: view.bounds.minY,
                                                      width: view.bounds.width,
                                                      height: view.bounds.height))
         details.recipe = recipe
-        scrollView = UIScrollView(frame: CGRect(x: self.scrollView.bounds.minX,
-                                                y: self.scrollView.bounds.minY,
-                                                width: view.bounds.width,
-                                                height: view.bounds.height))
+        scrollView = UIScrollView(frame: CGRect())
         scrollView.contentSize = CGSize(width: self.view.bounds.size.width,
                                         height: self.view.frame.size.height)
-
         self.view.addSubview(scrollView)
+        scrollView.anchor(self.view.topAnchor,
+                          left: self.view.leftAnchor,
+                          bottom: self.view.bottomAnchor,
+                          right: self.view.rightAnchor,
+                          topConstant: 0,
+                          leftConstant: 0,
+                          bottomConstant: 0,
+                          rightConstant: 0,
+                          widthConstant: 0,
+                          heightConstant: 0)
         self.scrollView.addSubview(details)
-        scrollView.addConstraint(NSLayoutConstraint(item: scrollView,
-                                                    attribute: .width,
-                                                    relatedBy: .equal,
-                                                    toItem: scrollView,
-                                                    attribute: .width,
-                                                    multiplier: 1,
-                                                    constant: 0))
+        details.anchor(self.scrollView.topAnchor,
+                       left: self.view.leftAnchor,
+                       bottom: self.view.bottomAnchor,
+                       right: self.view.rightAnchor,
+                       topConstant: 0,
+                       leftConstant: 0,
+                       bottomConstant: 0,
+                       rightConstant: 0,
+                       widthConstant: 0,
+                       heightConstant: 0)
         details.recipe = recipe
     }
 }

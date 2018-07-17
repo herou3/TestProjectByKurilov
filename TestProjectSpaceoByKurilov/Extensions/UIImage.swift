@@ -6,6 +6,7 @@
 import UIKit
 
 extension UIImage {
+    
     public func blendedByColor(_ color: UIColor) -> UIImage! {
         let scale = UIScreen.main.scale
         if scale > 1 {
@@ -21,6 +22,7 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return blendedImage!
     }
+    
     static func renderImage(_ originalImage: UIImage) -> UIImage {
         let renderImage = originalImage.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         return renderImage

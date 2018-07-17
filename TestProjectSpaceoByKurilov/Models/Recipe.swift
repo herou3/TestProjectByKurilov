@@ -18,6 +18,7 @@ struct Recipe: Codable {
     var description: String?
     var instructions: String?
     var difficulty: Int?
+    
     init(json: JSON) {
         self.name = json["name"].stringValue
         self.uuid = json["uuid"].stringValue
@@ -27,5 +28,6 @@ struct Recipe: Codable {
         self.instructions = json["instructions"].stringValue
         self.difficulty = json["difficulty"].intValue
     }
+    
     init() { }
 }

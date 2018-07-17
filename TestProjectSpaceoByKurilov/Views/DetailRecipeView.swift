@@ -13,6 +13,7 @@ class DetailRecipeView: UIView {
     var scrollSize: Int = 0
     var imageViewRect: CGRect = CGRect()
     var pageControl = UIPageControl()
+    
     var recipe: Recipe? {
         didSet {
             nameRecipeLabel.text = recipe?.name
@@ -42,6 +43,7 @@ class DetailRecipeView: UIView {
             }
         }
     }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         if recipe?.images != nil {
@@ -54,6 +56,7 @@ class DetailRecipeView: UIView {
         pageControl.currentPageIndicatorTintColor = UIColor.darkGreen
         viewForPageControl.addSubview(pageControl)
     }
+    
 // MARK: - Methods
     private func setupRecipeImage() {
         if let recipeImageViewURL = recipe?.images {
@@ -74,6 +77,7 @@ class DetailRecipeView: UIView {
             }
         }
     }
+    
     private func convertUnixTime(timeInterval: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: timeInterval)
         let dateFormatter = DateFormatter()
@@ -81,6 +85,7 @@ class DetailRecipeView: UIView {
         dateFormatter.dateStyle = .medium
         return dateFormatter.string(from: date)
     }
+    
     private func setupDifficultyStatus() {
         guard let difficulty = recipe?.difficulty else {
             return
@@ -95,7 +100,7 @@ class DetailRecipeView: UIView {
         let scrollView = UIScrollView()
         scrollView.frame = CGRect(x: 0,
                                   y: 0,
-                                  width: UIScreen.main.bounds.width,
+                                  width: UIScreen.main.bounds.width - Constant.marginLeftAndRight,
                                   height: UIScreen.main.bounds.height / 3)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.isPagingEnabled = true
@@ -187,6 +192,7 @@ class DetailRecipeView: UIView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
+    
     func setupViews() {
         addSubview(scrollViewForImages)
         addSubview(viewForPageControl)
@@ -315,11 +321,13 @@ class DetailRecipeView: UIView {
         fatalError("Init(coder!) has not been implemented")
     }
 }
+
 // MARK: - DELEGATE
 extension DetailRecipeView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pageControl.currentPage = currentPageIndex()
     }
+    
     private func currentPageIndex() -> Int {
         guard self.scrollViewForImages.bounds.size.width > 0 else {
             return 0

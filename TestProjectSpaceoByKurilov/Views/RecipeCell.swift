@@ -21,25 +21,27 @@ class DefaultCell: UITableViewCell {
 }
 
 class RecipeCell: DefaultCell {
-    var recipe: Recipe? {
-        didSet {
-            nameLabel.text = recipe?.name
-            if recipe?.images != nil && recipe?.images != [] {
-                recipeImageView.loadImage(urlString: (recipe?.images?.first)!)
-            } else {
-                recipeImageView.image = UIImage(named: "deffualt")
-            }
-            descriptionTextLabel.text = recipe?.description
-            if recipe?.difficulty != nil {
-                setupDifficultyStatus()
-            } else {
-                difficultyLabel.text = "0"
-            }
+// MARK: - Methods
+    func configureCell(recipeName: String?,
+                       recipeImages: [String]?,
+                       recipeDescription: String?,
+                       recipeDifficulty: Int?) {
+        nameLabel.text = recipeName
+        if recipeImages != nil && recipeImages != [] {
+            recipeImageView.loadImage(urlString: (recipeImages?.first)!)
+        } else {
+            recipeImageView.image = UIImage(named: "deffualt")
+        }
+        descriptionTextLabel.text = recipeDescription
+        if recipeDifficulty != nil {
+            setupDifficultyStatus(recipeDifficulty: recipeDifficulty)
+        } else {
+            difficultyLabel.text = "0"
         }
     }
-// MARK: - Methods
-    private func setupDifficultyStatus() {
-        switch recipe?.difficulty {
+    
+    private func setupDifficultyStatus(recipeDifficulty: Int?) {
+        switch recipeDifficulty {
         case 1:
             difficultyLabel.text = "1"
             difficultyLabel.backgroundColor = UIColor.paleRaiting
@@ -105,6 +107,7 @@ class RecipeCell: DefaultCell {
         textView.isEditable = false
         return textView
     }()
+    
     override func setupViews() {
         addSubview(recipeImageView)
         addSubview(lineView)
@@ -160,7 +163,9 @@ class RecipeCell: DefaultCell {
                         rightConstant: 0,
                         widthConstant: 0,
                         heightConstant: 2)
+        
     }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init(coder!) has not been implemented")
     }

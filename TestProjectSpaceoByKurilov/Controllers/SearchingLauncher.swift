@@ -13,10 +13,12 @@ class SearchingLauncher: NSObject {
         super.init()
         searchBar.delegate = self
     }
+    
 // MARK: - Property
     var searchBar: UISearchBar = {
         var search = UISearchBar(frame: .zero)
-        search.setStyleColor(UIColor.searchBar)
+        search.backgroundImage = UIImage(named: "greenKitchen-image")
+        search.tintColor = UIColor.appPrimary
         return search
     }()
     var changeSearchRequest = { () -> () in }
@@ -29,7 +31,7 @@ class SearchingLauncher: NSObject {
     func showSearchingBar() {
          if let window = UIApplication.shared.keyWindow {
             window.addSubview(searchBar)
-            let height: CGFloat = 64
+            let height: CGFloat = Constant.navBarFrame.height
             searchBar.frame = CGRect(x: window.frame.minX,
                                      y: window.frame.minY,
                                      width: window.frame.width,
@@ -48,16 +50,19 @@ class SearchingLauncher: NSObject {
         }
     }
 }
+
 // MARK: - DELEGATE
 extension SearchingLauncher: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar,
                    textDidChange searchText: String) {
-        self.searchingText = searchText
+        self.searchingText = searchText.lowercased()
         print(searchText)
     }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }

@@ -16,22 +16,31 @@ enum SortingName: String {
     case date = "Sort by date"
 }
 
+enum SortingType: String {
+    case isSearhing
+    case isFilterName
+    case isFilterDefault
+}
+
 class RecipesListController: UITableViewController {
     // MARK: - Property
     private var recipes: [Recipe]?
-    private var deffualtArrayRecipe: [Recipe]?
-    private var currentArray: [Recipe]? = []
-    private var searchingArray: [Recipe]? = []
+    private var defaultArrayRecipes: [Recipe]?
     var recipe: Recipe?
-    private let cellCollectionViewID = "cellId"
+    private let cellRecipeListTableView = "cellId"
     lazy var searchingLauncher: SearchingLauncher = {
         let searching = SearchingLauncher()
         return searching
     }()
+    let searchController = UISearchController(searchResultsController: nil)
+    private var currentArray: [Recipe]? = []
     private var isSearhing: Bool = false
     private var isFilterDate: Bool = false
     private var isFilterName: Bool = false
     private var isFilterDefault: Bool = true
+    
+    
+    
     // MARK: - DetectedInternetConnection
     func determiningAvailabilityOfInternet() {
         if ReachabilityConnect.isConnectedToNetwork() {
@@ -47,9 +56,12 @@ class RecipesListController: UITableViewController {
                          completion: nil)
         }
     }
+    
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configurateSearchBar()
+        
         Service.sharedInstance.featchHomeFeed { (recipeDataSource, err) in
             if let err = err {
                 print("Home Hold", err)
@@ -63,7 +75,7 @@ class RecipesListController: UITableViewController {
             }
             self.recipes = recipeDataSource?.recipes
             self.currentArray = self.recipes
-            self.deffualtArrayRecipe = self.recipes
+            self.defaultArrayRecipes = self.recipes
             self.tableView.reloadData()
         }
         navigationController?.navigationBar.isTranslucent = true
@@ -73,16 +85,28 @@ class RecipesListController: UITableViewController {
         titleLabel.textColor = UIColor.white
         navigationItem.titleView = titleLabel
         tableView?.backgroundColor = UIColor.white
-        tableView!.register(RecipeCell.self, forCellReuseIdentifier: cellCollectionViewID)
+        tableView!.register(RecipeCell.self, forCellReuseIdentifier: cellRecipeListTableView)
         searchingLauncher.changeSearchRequest = { [weak self] in
             self?.showSearchingResult()
         }
         configureView()
     }
-    // MARK: - Configurate Views
+    
+    // MARK: - Configurate
+    private func configurateSearchBar() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        searchController.searchBar.setBackgroundImage(#imageLiteral(resourceName: "greenKitchen-image"), for: .any, barMetrics: .default)
+        searchController.searchBar.barTintColor = UIColor.appPrimary
+        searchController.searchBar.tintColor = UIColor.appPrimary
+        tableView.tableHeaderView = searchController.searchBar
+    }
+    
     private func configureView() {
         addNavBarButtons()
     }
+    
     private func addNavBarButtons() {
         let searchImage = UIImage(named: "search-icon")?.withRenderingMode(.alwaysOriginal)
         let searchBarButtonItem = UIBarButtonItem(image: searchImage,
@@ -100,6 +124,7 @@ class RecipesListController: UITableViewController {
                                             action: #selector(refreshTableView))
         navigationItem.leftBarButtonItems = [refreshButton]
     }
+    
     // MARK: - Selectors
     @objc private func handleSort() {
         if isSearhing {
@@ -144,6 +169,7 @@ class RecipesListController: UITableViewController {
                      animated: true,
                      completion: nil)
     }
+    
     @objc private func refreshTableView() {
         Service.sharedInstance.featchHomeFeed { (recipeDataSource, err) in
             if let err = err {
@@ -167,10 +193,13 @@ class RecipesListController: UITableViewController {
                 self.sorterRicepiList(withUse: .name)
             }
             self.currentArray = self.recipes
-            self.deffualtArrayRecipe = self.recipes
             self.tableView.reloadData()
+            if self.isSearhing {
+                self.searchingLauncher.searchBar.text = ""
+            }
         }
     }
+    
     @objc private func handleSearch() {
         if isSearhing == false {
             self.searchingLauncher.showSearchingBar()
@@ -200,13 +229,14 @@ class RecipesListController: UITableViewController {
             isSearhing = false
         }
     }
-    // MARK: - ShowControllers
-    func sorterRicepiList(withUse sortedType: SortingName) {
+    
+    // MARK: - Segues
+    private func sorterRicepiList(withUse sortedType: SortingName) {
         switch sortedType.rawValue {
         case "Sort by default":
             print("default")
-            recipes = self.deffualtArrayRecipe
-            self.currentArray = self.deffualtArrayRecipe
+            recipes = self.defaultArrayRecipes
+            self.currentArray = self.defaultArrayRecipes
             self.searchingLauncher.searchingText = ""
             self.searchingLauncher.searchBar.text = ""
             isFilterDefault = true
@@ -220,7 +250,7 @@ class RecipesListController: UITableViewController {
                 isFilterName = true
                 return recipe1.name! < recipe2.name!
             })
-            self.currentArray = currentArray?.sorted(by: { (recipe1, recipe2) -> Bool in
+            self.currentArray = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
                 return recipe1.name! < recipe2.name!
             })
             recipes = sortedByName
@@ -230,7 +260,7 @@ class RecipesListController: UITableViewController {
             let sortedByDate = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
                 return recipe1.lastUpdated! < recipe2.lastUpdated!
             })
-            self.currentArray = currentArray?.sorted(by: { (recipe1, recipe2) -> Bool in
+            self.currentArray = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
                 return recipe1.lastUpdated! < recipe2.lastUpdated!
             })
             isFilterDefault = false
@@ -242,46 +272,48 @@ class RecipesListController: UITableViewController {
             self.tableView.reloadData()
         }
     }
-    // I don't use caseInsensitiveCompare
-    private func showSearchingResult() {
-        if currentArray != nil {
-//            for obj in currentArray {
-//                
-//            }
+    
+    private func delayedLaunch(after microseconds: Int, completion: @escaping () -> Void) {
+        let deadline = DispatchTime.now() + .microseconds(microseconds)
+        DispatchQueue.main.asyncAfter(deadline: deadline) {
+            completion()
         }
-//        if currentArray != nil {
-//            for obj in currentArray! {
-//                if (obj.name?.contains(find: self.searchingLauncher.searchingText!))! {
-//                    if !(searchingArray?.contains()! {
-//                        self.searchingArray?.append(obj)
-//                        self.recipes = searchingArray
-//                    }
-//                }
-//                if obj.description != nil
-//                    && (obj.description?.contains(find: self.searchingLauncher.searchingText!))! {
-//                        if !(searchingArray?.contains(obj))! {
-//                            self.searchingArray?.append(obj)
-//                            self.recipes = searchingArray
-//                        }
-//                    }
-//                if obj.instructions != nil && (obj.instructions?.contains(find: self.searchingLauncher.searchingText!))! {
-//                        if !(searchingArray?.contains(obj))! {
-//                            self.searchingArray?.append(obj)
-//                            self.recipes = searchingArray
-//                        }
-//                    }
-//                }
-//            self.tableView?.reloadData()
-//            if self.searchingArray?.count == 0 {
-//                self.recipes = currentArray
-//                self.tableView?.reloadData()
-//            }
-//            self.searchingArray = []
-//        }
-//        if self.searchingLauncher.searchingText == "" {
-//            self.recipes = currentArray
-//        }
     }
+    
+    private func showSearchingResult() {
+        guard !(self.searchingLauncher.searchingText?.isEmpty)! else {
+            recipes = defaultArrayRecipes
+            self.tableView.reloadData()
+            return
+        }
+        recipes = defaultArrayRecipes?.filter({ recipe -> Bool in
+            guard let text = self.searchingLauncher.searchingText else { return false }
+            return (recipe.name?.lowercased().contains(find: text))! ||
+                (recipe.description?.lowercased().contains(find: text))! ||
+                (recipe.instructions?.lowercased().contains(find: text))!
+        })
+        delayedLaunch(after: 300000) {
+            self.tableView.reloadData()
+        }
+    }
+    
+    private func searhBarIsEmpty() -> Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    private func filterContentForSearchText(_ searchText: String) {
+        recipes = defaultArrayRecipes?.filter({ recipe -> Bool in
+            guard let isNameContains = recipe.name?.lowercased().contains(find: searchText.lowercased()) else { return false }
+            guard let isDescriptionContains = recipe.description?.lowercased().contains(find: searchText.lowercased()) else { return false }
+            guard let isInstructionsContains = recipe.instructions?.lowercased().contains(find: searchText.lowercased()) else { return false }
+            return  isNameContains ||
+                    isDescriptionContains ||
+                    isInstructionsContains
+        })
+        self.tableView.reloadData()
+    }
+    
+    // MARK: - ShowControllers
     private func showDetailForRecipe(_ recipe: Recipe) {
         let recipeDetail = RecipeDetailController(recipe: recipe)
         recipeDetail.recipe = recipe
@@ -301,29 +333,58 @@ class RecipesListController: UITableViewController {
         isSearhing = false
         self.navigationController?.pushViewController(recipeDetail, animated: true)
     }
+    
     // MARK: - DELEGATE and DataSource
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes?.count ?? 0
     }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
+    
     override func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellCollectionViewID,
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellRecipeListTableView,
                                                        for: indexPath)
             as? RecipeCell else { return UITableViewCell(style: .default,
-                                                         reuseIdentifier: cellCollectionViewID)}
-        cell.recipe = recipes?[indexPath.item]
+                                                         reuseIdentifier: cellRecipeListTableView)}
+        cell.configureCell(recipeName: recipes?[indexPath.item].name,
+                           recipeImages: recipes?[indexPath.item].images,
+                           recipeDescription: recipes?[indexPath.item].description,
+                           recipeDifficulty: recipes?[indexPath.item].difficulty)
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        return Constant.cellHeight
+    }
+    
     override func tableView(_ tableView: UITableView,
                             didSelectRowAt indexPath: IndexPath) {
         self.recipe = self.recipes![indexPath.item]
         showDetailForRecipe(self.recipe!)
         print("selected \(indexPath.item)")
     }
+    
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.searchingLauncher.searchBar.endEditing(true)
     }
 }
+
+extension RecipesListController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        if !searhBarIsEmpty() {
+            filterContentForSearchText(searchController.searchBar.text!)
+        }
+    }
+}
+
+
+
+
+
+
+
+
