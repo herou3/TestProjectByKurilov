@@ -10,11 +10,11 @@ import LBTAComponents
 import SwiftyJSON
 import TRON
 
-class RecipeDataSource: JSONDecodable {
+struct RecipesResponse: JSONDecodable {
     // MARK: - Property
     let recipes: [Recipe]
     
-    required init(json: JSON) throws {
+    init(json: JSON) throws {
         print(json)
         guard let userJsonArray = json["recipes"].array else {
                 throw NSError(domain: "ru.test.space-o",

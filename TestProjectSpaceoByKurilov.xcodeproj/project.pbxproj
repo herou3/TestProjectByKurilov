@@ -10,33 +10,30 @@
 		14A5FE53DB34B8BED390BDDE /* Pods_TestProjectSpaceoByKurilov.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0AD12498D7D72BD2CAAED01 /* Pods_TestProjectSpaceoByKurilov.framework */; };
 		AB3B02DE20AD67C0004B132D /* RecipeDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3B02DD20AD67C0004B132D /* RecipeDetailController.swift */; };
 		AB3B02E020AD9E72004B132D /* DetailRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3B02DF20AD9E72004B132D /* DetailRecipeView.swift */; };
-		AB6E7FE220E88EE60083E7CB /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FE120E88EE60083E7CB /* String.swift */; };
+		AB6E7FE220E88EE60083E7CB /* String+contains.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FE120E88EE60083E7CB /* String+contains.swift */; };
 		AB6E7FE420E88F150083E7CB /* UIColor+AppColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FE320E88F150083E7CB /* UIColor+AppColor.swift */; };
-		AB6E7FE620E89C010083E7CB /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FE520E89C000083E7CB /* UIImage.swift */; };
+		AB6E7FE620E89C010083E7CB /* UIImage+renderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FE520E89C000083E7CB /* UIImage+renderImage.swift */; };
 		AB6E7FED20E94BB90083E7CB /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FEC20E94BB90083E7CB /* NetworkService.swift */; };
 		AB6E7FF120E94DB80083E7CB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FF020E94DB80083E7CB /* Constants.swift */; };
-		AB6E7FF320E97F8A0083E7CB /* RecipeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FF220E97F8A0083E7CB /* RecipeDataSource.swift */; };
-		AB6E7FF520E98A510083E7CB /* UIViewController+Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FF420E98A510083E7CB /* UIViewController+Alerts.swift */; };
+		AB6E7FF320E97F8A0083E7CB /* RecipesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6E7FF220E97F8A0083E7CB /* RecipesResponse.swift */; };
 		AB78374E20AA199C00587585 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78374D20AA199C00587585 /* AppDelegate.swift */; };
 		AB78375020AA199C00587585 /* RecipesListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78374F20AA199C00587585 /* RecipesListController.swift */; };
 		AB78376020AA26B800587585 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB78375F20AA26B800587585 /* LaunchScreen.storyboard */; };
 		AB78376620AA587100587585 /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376520AA587100587585 /* RecipeCell.swift */; };
 		AB78376E20AB1A3B00587585 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376D20AB1A3B00587585 /* Recipe.swift */; };
 		AB78377420ACE4AD00587585 /* ReachabilityConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */; };
-		AB7B178720BC22390016FEFF /* SearchingLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7B178620BC22390016FEFF /* SearchingLauncher.swift */; };
 		AB7B178920BFA1B40016FEFF /* Assets 10-20-53-831.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB7B178820BFA1B40016FEFF /* Assets 10-20-53-831.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AB3B02DD20AD67C0004B132D /* RecipeDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailController.swift; sourceTree = "<group>"; };
 		AB3B02DF20AD9E72004B132D /* DetailRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRecipeView.swift; sourceTree = "<group>"; };
-		AB6E7FE120E88EE60083E7CB /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		AB6E7FE120E88EE60083E7CB /* String+contains.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+contains.swift"; sourceTree = "<group>"; };
 		AB6E7FE320E88F150083E7CB /* UIColor+AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+AppColor.swift"; sourceTree = "<group>"; };
-		AB6E7FE520E89C000083E7CB /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		AB6E7FE520E89C000083E7CB /* UIImage+renderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+renderImage.swift"; sourceTree = "<group>"; };
 		AB6E7FEC20E94BB90083E7CB /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		AB6E7FF020E94DB80083E7CB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		AB6E7FF220E97F8A0083E7CB /* RecipeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDataSource.swift; sourceTree = "<group>"; };
-		AB6E7FF420E98A510083E7CB /* UIViewController+Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alerts.swift"; sourceTree = "<group>"; };
+		AB6E7FF220E97F8A0083E7CB /* RecipesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesResponse.swift; sourceTree = "<group>"; };
 		AB78374A20AA199C00587585 /* TestProjectSpaceoByKurilov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestProjectSpaceoByKurilov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB78374D20AA199C00587585 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB78374F20AA199C00587585 /* RecipesListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesListController.swift; sourceTree = "<group>"; };
@@ -45,7 +42,6 @@
 		AB78376520AA587100587585 /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
 		AB78376D20AB1A3B00587585 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityConnect.swift; sourceTree = "<group>"; };
-		AB7B178620BC22390016FEFF /* SearchingLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchingLauncher.swift; sourceTree = "<group>"; };
 		AB7B178820BFA1B40016FEFF /* Assets 10-20-53-831.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets 10-20-53-831.xcassets"; sourceTree = "<group>"; };
 		B6EE34A0ED03A7B97A03E9BF /* Pods-TestProjectSpaceoByKurilov.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestProjectSpaceoByKurilov.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TestProjectSpaceoByKurilov/Pods-TestProjectSpaceoByKurilov.debug.xcconfig"; sourceTree = "<group>"; };
 		DD0EA37BC593939BEC143BC4 /* Pods-TestProjectSpaceoByKurilov.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestProjectSpaceoByKurilov.release.xcconfig"; path = "Pods/Target Support Files/Pods-TestProjectSpaceoByKurilov/Pods-TestProjectSpaceoByKurilov.release.xcconfig"; sourceTree = "<group>"; };
@@ -76,10 +72,9 @@
 		AB6E7FE020E88E9A0083E7CB /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				AB6E7FE120E88EE60083E7CB /* String.swift */,
+				AB6E7FE120E88EE60083E7CB /* String+contains.swift */,
 				AB6E7FE320E88F150083E7CB /* UIColor+AppColor.swift */,
-				AB6E7FE520E89C000083E7CB /* UIImage.swift */,
-				AB6E7FF420E98A510083E7CB /* UIViewController+Alerts.swift */,
+				AB6E7FE520E89C000083E7CB /* UIImage+renderImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -87,6 +82,7 @@
 		AB6E7FEB20E9482B0083E7CB /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				AB6E7FF220E97F8A0083E7CB /* RecipesResponse.swift */,
 				AB6E7FEC20E94BB90083E7CB /* NetworkService.swift */,
 			);
 			path = Service;
@@ -149,7 +145,6 @@
 			isa = PBXGroup;
 			children = (
 				AB78374F20AA199C00587585 /* RecipesListController.swift */,
-				AB7B178620BC22390016FEFF /* SearchingLauncher.swift */,
 				AB3B02DD20AD67C0004B132D /* RecipeDetailController.swift */,
 			);
 			path = Controllers;
@@ -159,7 +154,6 @@
 			isa = PBXGroup;
 			children = (
 				AB78376D20AB1A3B00587585 /* Recipe.swift */,
-				AB6E7FF220E97F8A0083E7CB /* RecipeDataSource.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -250,6 +244,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-TestProjectSpaceoByKurilov/Pods-TestProjectSpaceoByKurilov-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/LBTAComponents/LBTAComponents.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/TRON/TRON.framework",
 			);
@@ -257,6 +252,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LBTAComponents.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TRON.framework",
 			);
@@ -285,7 +281,7 @@
 		};
 		ABD19DF820C6F95C005AC8A0 /* Run Script (swiftlint) */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -293,7 +289,7 @@
 			name = "Run Script (swiftlint)";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"error: SwiftLint does not exist, download it from https://github.com/realm/SwiftLint\"\nexit 1\nfi";
 		};
@@ -308,16 +304,14 @@
 				AB6E7FF120E94DB80083E7CB /* Constants.swift in Sources */,
 				AB78376E20AB1A3B00587585 /* Recipe.swift in Sources */,
 				AB6E7FED20E94BB90083E7CB /* NetworkService.swift in Sources */,
-				AB6E7FF320E97F8A0083E7CB /* RecipeDataSource.swift in Sources */,
-				AB7B178720BC22390016FEFF /* SearchingLauncher.swift in Sources */,
-				AB6E7FE620E89C010083E7CB /* UIImage.swift in Sources */,
+				AB6E7FF320E97F8A0083E7CB /* RecipesResponse.swift in Sources */,
+				AB6E7FE620E89C010083E7CB /* UIImage+renderImage.swift in Sources */,
 				AB78375020AA199C00587585 /* RecipesListController.swift in Sources */,
 				AB3B02DE20AD67C0004B132D /* RecipeDetailController.swift in Sources */,
 				AB6E7FE420E88F150083E7CB /* UIColor+AppColor.swift in Sources */,
 				AB78377420ACE4AD00587585 /* ReachabilityConnect.swift in Sources */,
-				AB6E7FE220E88EE60083E7CB /* String.swift in Sources */,
+				AB6E7FE220E88EE60083E7CB /* String+contains.swift in Sources */,
 				AB78374E20AA199C00587585 /* AppDelegate.swift in Sources */,
-				AB6E7FF520E98A510083E7CB /* UIViewController+Alerts.swift in Sources */,
 				AB78376620AA587100587585 /* RecipeCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

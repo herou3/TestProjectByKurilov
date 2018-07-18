@@ -10,14 +10,13 @@ import Foundation
 import TRON
 import SwiftyJSON
 
-struct Service {
+class NetworkService {
     // MARK: - Propery
     let tron = TRON(baseURL: Constant.baseUrl)
-    static let sharedInstance = Service()
     
     // MARK: - Action
-    func featchHomeFeed(completion: @escaping (RecipeDataSource?, Error?) -> ()) {
-        let request: APIRequest<RecipeDataSource, JSONError> = tron.swiftyJSON.request("recipes")
+    func featchHomeFeed(completion: @escaping (RecipesResponse?, Error?) -> Void) {
+        let request: APIRequest<RecipesResponse, JSONError> = tron.swiftyJSON.request("recipes")
         request.perform(withSuccess: { (recipeDataSource) in
             completion(recipeDataSource, nil)
         }) { (err) in

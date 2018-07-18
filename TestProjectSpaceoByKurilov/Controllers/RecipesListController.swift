@@ -10,97 +10,114 @@ import LBTAComponents
 import SwiftyJSON
 import TRON
 
-enum SortingName: String {
-    case defaultSort = "Sort by default"
-    case name = "Sort by name"
-    case date = "Sort by date"
-}
-
 enum SortingType: String {
-    case isSearhing
-    case isFilterName
-    case isFilterDefault
+    case defaultSort, name, date
+    
+    var description: String {
+            switch self {
+            case .defaultSort:
+                return "Sort by default"
+            case .name:
+                return "Sort by name"
+            case .date:
+                return "Sort by date"
+        }
+    }
 }
 
 class RecipesListController: UITableViewController {
     // MARK: - Property
-    private var recipes: [Recipe]?
-    private var defaultArrayRecipes: [Recipe]?
-    var recipe: Recipe?
-    private let cellRecipeListTableView = "cellId"
-    lazy var searchingLauncher: SearchingLauncher = {
-        let searching = SearchingLauncher()
-        return searching
-    }()
-    let searchController = UISearchController(searchResultsController: nil)
-    private var currentArray: [Recipe]? = []
-    private var isSearhing: Bool = false
-    private var isFilterDate: Bool = false
-    private var isFilterName: Bool = false
-    private var isFilterDefault: Bool = true
-    
-    
-    
-    // MARK: - DetectedInternetConnection
-    func determiningAvailabilityOfInternet() {
-        if ReachabilityConnect.isConnectedToNetwork() {
-        } else {
-            let alert = UIAlertController(title: "Oops, you have problem",
-                                          message: "The Internet connection appears to be offline",
-                                          preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay...",
-                                          style: UIAlertActionStyle.default,
-                                          handler: nil))
-            self.present(alert,
-                         animated: true,
-                         completion: nil)
-        }
-    }
-    
-    // MARK: - Init
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.configurateSearchBar()
-        
-        Service.sharedInstance.featchHomeFeed { (recipeDataSource, err) in
-            if let err = err {
-                print("Home Hold", err)
-                if let apiError = err as? APIError<Service.JSONError> {
-                    if apiError.response?.statusCode != 200 {
-                        print("Status code not was 200")
-                        self.determiningAvailabilityOfInternet()
-                    }
-                }
-                return
-            }
-            self.recipes = recipeDataSource?.recipes
-            self.currentArray = self.recipes
-            self.defaultArrayRecipes = self.recipes
+    private var recipes: [Recipe]? {
+        didSet {
             self.tableView.reloadData()
         }
-        navigationController?.navigationBar.isTranslucent = true
+    }
+    private var defaultArrayRecipes: [Recipe]?
+    private let recipeCellReuseIdentifier = "cellId"
+    private let searchController = UISearchController(searchResultsController: nil)
+    private var currentArray: [Recipe]? = []
+    private var isSearhing: Bool = false
+    private var navigationTitleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Recipes List"
         titleLabel.font = UIFont.systemFont(ofSize: 20)
         titleLabel.textColor = UIColor.white
-        navigationItem.titleView = titleLabel
-        tableView?.backgroundColor = UIColor.white
-        tableView!.register(RecipeCell.self, forCellReuseIdentifier: cellRecipeListTableView)
-        searchingLauncher.changeSearchRequest = { [weak self] in
-            self?.showSearchingResult()
-        }
+        return titleLabel
+    }()
+    private var networkService: NetworkService
+    lazy var refreshDataControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self,
+                                 action: #selector(refreshWeatherData(_:)),
+                                 for: .valueChanged)
+        refreshControl.tintColor = UIColor.appPrimary
+        return refreshControl
+    }()
+    
+    // MARK: - Determining Error Of Internet
+    func determiningErrorOfInternet(error: Error) {
+        let alert = UIAlertController(title: "Oops, you have problem",
+                                      message: error.localizedDescription,
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Okay...",
+                                      style: UIAlertActionStyle.default,
+                                      handler: nil))
+        self.present(alert,
+                     animated: true,
+                     completion: nil)
+    }
+    
+    // MARK: - Init
+    init(networkService: NetworkService) {
+        self.networkService = networkService
+        super.init(style: .plain)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configurateSearchBar()
+        loadAndRefreshRecipesData()
+        navigationController?.navigationBar.isTranslucent = true
+        configurateTablleView()
+        configurateNavigationBar()
         configureView()
     }
     
     // MARK: - Configurate
+    private func configurateTablleView() {
+        tableView?.backgroundColor = UIColor.white
+        tableView!.register(RecipeCell.self,
+                            forCellReuseIdentifier: recipeCellReuseIdentifier)
+        tableView.showsHorizontalScrollIndicator = false
+        tableView.addSubview(refreshDataControl)
+    }
+    
     private func configurateSearchBar() {
         searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
-        searchController.searchBar.setBackgroundImage(#imageLiteral(resourceName: "greenKitchen-image"), for: .any, barMetrics: .default)
-        searchController.searchBar.barTintColor = UIColor.appPrimary
+        searchController.searchBar.barTintColor = UIColor.white
         searchController.searchBar.tintColor = UIColor.appPrimary
+        searchController.searchBar.setBackgroundImage(#imageLiteral(resourceName: "greenKitchen-image"), for: .any, barMetrics: .default)
+        searchController.searchBar.backgroundColor = .appPrimary
         tableView.tableHeaderView = searchController.searchBar
+    }
+    
+    private func configurateNavigationBar() {
+        navigationController?.navigationBar.barTintColor = UIColor.appPrimary
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.tintColor = .white
+        if #available(iOS 11.0, *) {
+            navigationItem.titleView = self.navigationTitleLabel
+        } else {
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+            navigationItem.title = "Recipes List"
+        }
     }
     
     private func configureView() {
@@ -108,55 +125,52 @@ class RecipesListController: UITableViewController {
     }
     
     private func addNavBarButtons() {
-        let searchImage = UIImage(named: "search-icon")?.withRenderingMode(.alwaysOriginal)
-        let searchBarButtonItem = UIBarButtonItem(image: searchImage,
-                                                  style: .plain,
-                                                  target: self,
-                                                  action: #selector(handleSearch))
-        let sortButton = UIBarButtonItem(image: UIImage(named: "sort-icon")?.withRenderingMode(.alwaysOriginal),
+        let sortButtonItem = UIBarButtonItem(image: UIImage(named: "sort-icon")?.withRenderingMode(.alwaysOriginal),
                                          style: .plain,
                                          target: self,
                                          action: #selector(handleSort))
-        navigationItem.rightBarButtonItems = [searchBarButtonItem, sortButton]
-        let refreshButton = UIBarButtonItem(image: UIImage(named: "refresh-icon")?.withRenderingMode(.alwaysOriginal),
+        navigationItem.rightBarButtonItems = [sortButtonItem]
+        let refreshButtonItem = UIBarButtonItem(image: UIImage(named: "refresh-icon")?.withRenderingMode(.alwaysOriginal),
                                             style: .plain,
                                             target: self,
                                             action: #selector(refreshTableView))
-        navigationItem.leftBarButtonItems = [refreshButton]
+        navigationItem.leftBarButtonItems = [refreshButtonItem]
+    }
+    
+    private func loadAndRefreshRecipesData() {
+        networkService.featchHomeFeed { (recipeDataSource, err) in
+            if let err = err {
+                print("Home Hold", err)
+                if let apiError = err as? APIError<NetworkService.JSONError> {
+                    if apiError.response?.statusCode != 200 {
+                        print("Status code not was 200")
+                        self.determiningErrorOfInternet(error: err)
+                    }
+                }
+                return
+            }
+            self.recipes = recipeDataSource?.recipes
+            self.currentArray = self.recipes
+            self.defaultArrayRecipes = self.recipes
+        }
     }
     
     // MARK: - Selectors
     @objc private func handleSort() {
-        if isSearhing {
-            self.searchingLauncher.searchBar.alpha = 0
-            self.searchingLauncher.searchBar.endEditing(true)
-            self.tableView?.contentInset = UIEdgeInsetsMake(Constant.navBarFrame.minY,
-                                                            Constant.navBarFrame.minX,
-                                                            Constant.navBarFrame.minX,
-                                                            Constant.navBarFrame.minY)
-            self.tableView?.scrollIndicatorInsets = UIEdgeInsetsMake(Constant.navBarFrame.minY,
-                                                                     Constant.navBarFrame.minX,
-                                                                     Constant.navBarFrame.minX,
-                                                                     Constant.navBarFrame.minY)
-            isSearhing = false
-        }
         let alertController = UIAlertController(title: nil,
                                                 message: nil,
                                                 preferredStyle: .actionSheet)
-        let sortByDefault = UIAlertAction(title: SortingName.defaultSort.rawValue,
-                                          style: .default) {
-                                            (action) in
-            self.sorterRicepiList(withUse: .defaultSort)
+        let sortByDefault = UIAlertAction(title: SortingType.defaultSort.description,
+                                          style: .default) { _ in
+            self.sorterRecipeList(by: .defaultSort)
         }
-        let sortByDate = UIAlertAction(title: SortingName.date.rawValue,
-                                       style: .default) {
-                                        (action) in
-            self.sorterRicepiList(withUse: .date)
+        let sortByDate = UIAlertAction(title: SortingType.date.description,
+                                       style: .default) { _ in
+            self.sorterRecipeList(by: .date)
         }
-        let sortByName = UIAlertAction(title: SortingName.name.rawValue,
-                                       style: .default) {
-                                        (action) in
-            self.sorterRicepiList(withUse: .name)
+        let sortByName = UIAlertAction(title: SortingType.name.description,
+                                       style: .default) { _ in
+            self.sorterRecipeList(by: .name)
         }
         let cancelActionSheet = UIAlertAction(title: "Cancel",
                                               style: .cancel,
@@ -171,83 +185,25 @@ class RecipesListController: UITableViewController {
     }
     
     @objc private func refreshTableView() {
-        Service.sharedInstance.featchHomeFeed { (recipeDataSource, err) in
-            if let err = err {
-                print("Home Hold", err)
-                if let apiError = err as? APIError<Service.JSONError> {
-                    if apiError.response?.statusCode != 200 {
-                        print("Status code not was 200")
-                        self.determiningAvailabilityOfInternet()
-                        self.showAlertError(withMessage: err.localizedDescription,
-                                            title: "Error",
-                                            style: .default)
-                    }
-                }
-                return
-            }
-            if self.isFilterDefault {
-                self.recipes = recipeDataSource?.recipes
-            } else if self.isFilterDate {
-                self.sorterRicepiList(withUse: .date)
-            } else {
-                self.sorterRicepiList(withUse: .name)
-            }
-            self.currentArray = self.recipes
-            self.tableView.reloadData()
-            if self.isSearhing {
-                self.searchingLauncher.searchBar.text = ""
-            }
-        }
+        loadAndRefreshRecipesData()
     }
     
-    @objc private func handleSearch() {
-        if isSearhing == false {
-            self.searchingLauncher.showSearchingBar()
-            self.tableView?.contentInset = UIEdgeInsetsMake(Constant.navBarFrame.height,
-                                                            Constant.navBarFrame.minX,
-                                                            Constant.navBarFrame.minX,
-                                                            Constant.navBarFrame.minY)
-            self.tableView?.scrollIndicatorInsets = UIEdgeInsetsMake(Constant.navBarFrame.height,
-                                                                     Constant.navBarFrame.minX,
-                                                                     Constant.navBarFrame.minX,
-                                                                     Constant.navBarFrame.minY)
-            self.searchingLauncher.searchBar.alpha = 1
-            isSearhing = true
-        } else {
-            self.searchingLauncher.searchBar.alpha = 0
-            self.searchingLauncher.searchBar.text = ""
-            self.searchingLauncher.searchingText = ""
-            self.tableView?.contentInset = UIEdgeInsetsMake(Constant.navBarFrame.minY,
-                                                            Constant.navBarFrame.minX,
-                                                            Constant.navBarFrame.minX,
-                                                            Constant.navBarFrame.minY)
-            self.tableView?.scrollIndicatorInsets = UIEdgeInsetsMake(Constant.navBarFrame.minY,
-                                                                     Constant.navBarFrame.minX,
-                                                                     Constant.navBarFrame.minX,
-                                                                     Constant.navBarFrame.minY)
-            self.searchingLauncher.searchBar.endEditing(true)
-            isSearhing = false
-        }
+    @objc private func refreshWeatherData(_ sender: Any) {
+        loadAndRefreshRecipesData()
+        self.tableView.reloadData()
+        self.refreshDataControl.endRefreshing()
     }
     
     // MARK: - Segues
-    private func sorterRicepiList(withUse sortedType: SortingName) {
-        switch sortedType.rawValue {
+    private func sorterRecipeList(by sortedType: SortingType) {
+        switch sortedType.description {
         case "Sort by default":
             print("default")
             recipes = self.defaultArrayRecipes
             self.currentArray = self.defaultArrayRecipes
-            self.searchingLauncher.searchingText = ""
-            self.searchingLauncher.searchBar.text = ""
-            isFilterDefault = true
-            isFilterDate = false
-            isFilterName = false
             self.tableView.reloadData()
         case "Sort by name":
             let sortedByName = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
-                isFilterDefault = false
-                isFilterDate = false
-                isFilterName = true
                 return recipe1.name! < recipe2.name!
             })
             self.currentArray = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
@@ -263,37 +219,9 @@ class RecipesListController: UITableViewController {
             self.currentArray = recipes?.sorted(by: { (recipe1, recipe2) -> Bool in
                 return recipe1.lastUpdated! < recipe2.lastUpdated!
             })
-            isFilterDefault = false
-            isFilterDate = true
-            isFilterName = false
             recipes = sortedByDate
-            self.tableView?.reloadData()
         default:
-            self.tableView.reloadData()
-        }
-    }
-    
-    private func delayedLaunch(after microseconds: Int, completion: @escaping () -> Void) {
-        let deadline = DispatchTime.now() + .microseconds(microseconds)
-        DispatchQueue.main.asyncAfter(deadline: deadline) {
-            completion()
-        }
-    }
-    
-    private func showSearchingResult() {
-        guard !(self.searchingLauncher.searchingText?.isEmpty)! else {
-            recipes = defaultArrayRecipes
-            self.tableView.reloadData()
-            return
-        }
-        recipes = defaultArrayRecipes?.filter({ recipe -> Bool in
-            guard let text = self.searchingLauncher.searchingText else { return false }
-            return (recipe.name?.lowercased().contains(find: text))! ||
-                (recipe.description?.lowercased().contains(find: text))! ||
-                (recipe.instructions?.lowercased().contains(find: text))!
-        })
-        delayedLaunch(after: 300000) {
-            self.tableView.reloadData()
+            print("Example")
         }
     }
     
@@ -302,10 +230,12 @@ class RecipesListController: UITableViewController {
     }
     
     private func filterContentForSearchText(_ searchText: String) {
-        recipes = defaultArrayRecipes?.filter({ recipe -> Bool in
+        recipes = currentArray?.filter({ recipe -> Bool in
             guard let isNameContains = recipe.name?.lowercased().contains(find: searchText.lowercased()) else { return false }
-            guard let isDescriptionContains = recipe.description?.lowercased().contains(find: searchText.lowercased()) else { return false }
-            guard let isInstructionsContains = recipe.instructions?.lowercased().contains(find: searchText.lowercased()) else { return false }
+            guard let isDescriptionContains = recipe.description?.lowercased().contains(find: searchText.lowercased())
+                else { return false }
+            guard let isInstructionsContains = recipe.instructions?.lowercased().contains(find: searchText.lowercased())
+                else { return false }
             return  isNameContains ||
                     isDescriptionContains ||
                     isInstructionsContains
@@ -313,28 +243,21 @@ class RecipesListController: UITableViewController {
         self.tableView.reloadData()
     }
     
+    private func isFiltering() -> Bool {
+        return searchController.isActive && !searhBarIsEmpty()
+    }
+    
     // MARK: - ShowControllers
     private func showDetailForRecipe(_ recipe: Recipe) {
         let recipeDetail = RecipeDetailController(recipe: recipe)
         recipeDetail.recipe = recipe
-        self.searchingLauncher.searchBar.alpha = 0
-        self.searchingLauncher.searchBar.endEditing(true)
-        if isSearhing {
-            self.tableView?.contentInset = UIEdgeInsetsMake(Constant.navBarFrame.minY,
-                                                            Constant.navBarFrame.minX,
-                                                            Constant.navBarFrame.minX,
-                                                            Constant.navBarFrame.minY)
-            self.tableView?.scrollIndicatorInsets = UIEdgeInsetsMake(Constant.navBarFrame.minY,
-                                                                     Constant.navBarFrame.minX,
-                                                                     Constant.navBarFrame.minX,
-                                                                     Constant.navBarFrame.minY)
-            self.tableView?.reloadData()
-        }
-        isSearhing = false
         self.navigationController?.pushViewController(recipeDetail, animated: true)
     }
+}
+
+// MARK: - extension DELEGATE and DataSource
+extension RecipesListController {
     
-    // MARK: - DELEGATE and DataSource
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes?.count ?? 0
     }
@@ -345,14 +268,15 @@ class RecipesListController: UITableViewController {
     
     override func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellRecipeListTableView,
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: recipeCellReuseIdentifier,
                                                        for: indexPath)
             as? RecipeCell else { return UITableViewCell(style: .default,
-                                                         reuseIdentifier: cellRecipeListTableView)}
+                                                         reuseIdentifier: recipeCellReuseIdentifier)}
         cell.configureCell(recipeName: recipes?[indexPath.item].name,
                            recipeImages: recipes?[indexPath.item].images,
                            recipeDescription: recipes?[indexPath.item].description,
                            recipeDifficulty: recipes?[indexPath.item].difficulty)
+        cell.selectionStyle = .none
         return cell
     }
     
@@ -363,28 +287,39 @@ class RecipesListController: UITableViewController {
     
     override func tableView(_ tableView: UITableView,
                             didSelectRowAt indexPath: IndexPath) {
-        self.recipe = self.recipes![indexPath.item]
-        showDetailForRecipe(self.recipe!)
-        print("selected \(indexPath.item)")
+        let recipe = self.recipes![indexPath.item]
+        showDetailForRecipe(recipe)
     }
     
-    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.searchingLauncher.searchBar.endEditing(true)
+    override func tableView(_ tableView: UITableView,
+                            willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
+       tableView.deselectRow(at: indexPath, animated: true)
+        return indexPath
     }
 }
 
+// MARK: - extension UISearchResultsUpdating
 extension RecipesListController: UISearchResultsUpdating {
+
     func updateSearchResults(for searchController: UISearchController) {
         if !searhBarIsEmpty() {
             filterContentForSearchText(searchController.searchBar.text!)
+        } else {
+            recipes = currentArray
         }
     }
 }
 
-
-
-
-
-
-
-
+// MARK: - extension UISearchBarDelegate
+extension RecipesListController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        recipes = currentArray
+        self.tableView.reloadData()
+    }
+}

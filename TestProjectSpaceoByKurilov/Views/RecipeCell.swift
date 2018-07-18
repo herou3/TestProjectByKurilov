@@ -7,39 +7,34 @@
 //
 
 import LBTAComponents
+import SnapKit
 
 class DefaultCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: "StelID")
+        super.init(style: .default, reuseIdentifier: "recipeCellReuseIdentifier")
         setupViews()
     }
+    
     func setupViews() {
     }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
 class RecipeCell: DefaultCell {
-// MARK: - Methods
-    func configureCell(recipeName: String?,
-                       recipeImages: [String]?,
-                       recipeDescription: String?,
-                       recipeDifficulty: Int?) {
-        nameLabel.text = recipeName
-        if recipeImages != nil && recipeImages != [] {
-            recipeImageView.loadImage(urlString: (recipeImages?.first)!)
-        } else {
-            recipeImageView.image = UIImage(named: "deffualt")
-        }
-        descriptionTextLabel.text = recipeDescription
-        if recipeDifficulty != nil {
-            setupDifficultyStatus(recipeDifficulty: recipeDifficulty)
-        } else {
-            difficultyLabel.text = "0"
-        }
+    
+    // MARK: - Init RecipeCell
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("Init(coder!) has not been implemented")
+    }
+    
+// MARK: - Methods
     private func setupDifficultyStatus(recipeDifficulty: Int?) {
         switch recipeDifficulty {
         case 1:
@@ -61,13 +56,11 @@ class RecipeCell: DefaultCell {
             difficultyLabel.text = "0"
         }
     }
+    
 // MARK: - Create UIView for cell
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
     private let recipeImageView: CachedImageView = {
         let imageView = CachedImageView()
-        imageView.image = UIImage(named: "image-not-found")
+        imageView.image = #imageLiteral(resourceName: "image-not-found")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -83,7 +76,6 @@ class RecipeCell: DefaultCell {
         let label = UILabel()
         label.backgroundColor = UIColor.appPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "4"
         label.textColor = UIColor.white
         label.textAlignment = NSTextAlignment.center
         label.layer.cornerRadius = 22
@@ -94,79 +86,93 @@ class RecipeCell: DefaultCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.darkGreen
-        label.text = "Суши филадельфия"
         label.numberOfLines = 2
         return label
     }()
-    private let descriptionTextLabel: UITextView = {
+    private let descriptionTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.text? = "Суши обернутые лососем, внутри - рис, творожный сыр"
         textView.textColor = UIColor.descriptionText
         textView.font = UIFont.systemFont(ofSize: 12)
         textView.isEditable = false
         return textView
     }()
     
-    override func setupViews() {
+    // MARK: - Configurate RecipeCell
+    private func addRecipeImageView() {
         addSubview(recipeImageView)
-        addSubview(lineView)
-        addSubview(difficultyLabel)
-        addSubview(nameLabel)
-        addSubview(descriptionTextLabel)
-        recipeImageView.anchor(self.topAnchor,
-                               left: self.leftAnchor,
-                               bottom: self.bottomAnchor,
-                               right: nil, topConstant: 16,
-                               leftConstant: 16,
-                               bottomConstant: 16,
-                               rightConstant: 0,
-                               widthConstant: 150,
-                               heightConstant: 202)
-        difficultyLabel.anchor(recipeImageView.topAnchor,
-                               left: recipeImageView.leftAnchor,
-                               bottom: nil,
-                               right: nil,
-                               topConstant: 0,
-                               leftConstant: 0,
-                               bottomConstant: 0,
-                               rightConstant: 0,
-                               widthConstant: 40,
-                               heightConstant: 40)
-        nameLabel.anchor(recipeImageView.topAnchor,
-                         left: recipeImageView.rightAnchor,
-                         bottom: nil,
-                         right: self.rightAnchor,
-                         topConstant: 0,
-                         leftConstant: 8,
-                         bottomConstant: 0,
-                         rightConstant: 16,
-                         widthConstant: 0,
-                         heightConstant: 44)
-        descriptionTextLabel.anchor(nameLabel.bottomAnchor,
-                                    left: recipeImageView.rightAnchor,
-                                    bottom: self.bottomAnchor,
-                                    right: self.rightAnchor,
-                                    topConstant: 8,
-                                    leftConstant: 8,
-                                    bottomConstant: 16,
-                                    rightConstant: 16,
-                                    widthConstant: 0,
-                                    heightConstant: 0)
-        lineView.anchor(nil,
-                        left: self.leftAnchor,
-                        bottom: self.bottomAnchor,
-                        right: self.rightAnchor,
-                        topConstant: 0,
-                        leftConstant: 0,
-                        bottomConstant: 0,
-                        rightConstant: 0,
-                        widthConstant: 0,
-                        heightConstant: 2)
-        
+        recipeImageView.snp.makeConstraints { (make) in
+            make.top.left.equalTo(self).offset(16)
+            make.height.equalTo(Constant.cellHeight / 2)
+            make.right.equalTo(self).offset(-16)
+        }
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("Init(coder!) has not been implemented")
+    private func addDifficultyLabel() {
+        addSubview(difficultyLabel)
+        difficultyLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(recipeImageView)
+            make.left.equalTo(self).offset(16)
+            make.width.height.equalTo(40)
+        }
+    }
+    
+    private func addNameLabel() {
+        addSubview(nameLabel)
+        nameLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(recipeImageView.snp.bottom).offset(16)
+            make.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+        }
+    }
+    
+    private func addDescriptionTextLabel() {
+        addSubview(descriptionTextView)
+        descriptionTextView.snp.makeConstraints { (make) in
+            make.top.equalTo(nameLabel.snp.bottom).offset(8)
+            make.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+        }
+    }
+    
+    private func addLineView() {
+        addSubview(lineView)
+        lineView.snp.makeConstraints { (make) in
+            make.top.equalTo(descriptionTextView.snp.bottom).offset(8)
+            make.left.equalTo(self)
+            make.right.equalTo(self)
+            make.height.equalTo(2)
+            make.bottom.equalTo(self)
+        }
+    }
+    
+    override func setupViews() {
+        addRecipeImageView()
+        addDifficultyLabel()
+        addNameLabel()
+        addDescriptionTextLabel()
+        addLineView()
+    }
+    
+    func configureCell(recipeName: String?,
+                       recipeImages: [String]?,
+                       recipeDescription: String?,
+                       recipeDifficulty: Int?) {
+        nameLabel.text = recipeName
+        if recipeImages != nil && recipeImages != [] {
+            recipeImageView.loadImage(urlString: (recipeImages?.first)!)
+        } else {
+            recipeImageView.image = UIImage(named: "deffualt")
+        }
+        if recipeDescription != nil && recipeDescription != "" {
+            descriptionTextView.text = recipeDescription
+        } else {
+            descriptionTextView.text = "No description"
+        }
+        if recipeDifficulty != nil {
+            setupDifficultyStatus(recipeDifficulty: recipeDifficulty)
+        } else {
+            difficultyLabel.text = "0"
+        }
     }
 }

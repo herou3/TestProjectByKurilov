@@ -10,6 +10,16 @@ import UIKit
 import SwiftyJSON
 import TRON
 
+private struct Keys {
+    static let name: String = "name"
+    static let uuid: String = "uuid"
+    static let images: String = "images"
+    static let lastUpdated: String = "lastUpdated"
+    static let description: String = "description"
+    static let instructions: String = "instructions"
+    static let difficulty: String = "difficulty"
+}
+
 struct Recipe: Codable {
     var uuid: String?
     var name: String?
@@ -20,13 +30,13 @@ struct Recipe: Codable {
     var difficulty: Int?
     
     init(json: JSON) {
-        self.name = json["name"].stringValue
-        self.uuid = json["uuid"].stringValue
-        self.images = json["images"].arrayObject as? [String]
-        self.lastUpdated = json["lastUpdated"].intValue
-        self.description = json["description"].stringValue
-        self.instructions = json["instructions"].stringValue
-        self.difficulty = json["difficulty"].intValue
+        self.name = json[Keys.name].stringValue
+        self.uuid = json[Keys.uuid].stringValue
+        self.images = json[Keys.images].arrayObject as? [String]
+        self.lastUpdated = json[Keys.lastUpdated].intValue
+        self.description = json[Keys.description].stringValue
+        self.instructions = json[Keys.instructions].stringValue
+        self.difficulty = json[Keys.difficulty].intValue
     }
     
     init() { }

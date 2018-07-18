@@ -15,13 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        let networkService = NetworkService()
+        let tableViewController = RecipesListController(networkService: networkService)
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController = UINavigationController(rootViewController: RecipesListController())
-        // get rid of black bar underneath navbar
-        UINavigationBar.appearance().barTintColor = UIColor.appPrimary
-        UINavigationBar.appearance().shadowImage = UIImage()
-        application.statusBarStyle = .lightContent
+        self.window?.rootViewController = UINavigationController(rootViewController: tableViewController)
         return true
     }
 

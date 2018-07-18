@@ -2,52 +2,23 @@
 //  DetailRecipeView.swift
 //  TestProjectSpaceoByKurilov
 //
-//  Created by Pavel Kurilov on 17.05.2018.
-//  Copyright © 2018 Pavel Kurilov. All rights reserved.
-//
 
 import LBTAComponents
+import SnapKit
 
 class DetailRecipeView: UIView {
 // MARK: - Property
     var scrollSize: Int = 0
     var imageViewRect: CGRect = CGRect()
     var pageControl = UIPageControl()
+    var sizeView: CGFloat = 0
+    var recipeImagesArray: [String]?
     
-    var recipe: Recipe? {
-        didSet {
-            nameRecipeLabel.text = recipe?.name
-            if recipe?.images != nil {
-                imageViewRect = self.scrollViewForImages.bounds
-                setupRecipeImage()
-                guard let imagesCount = recipe?.images?.count else {
-                    return
-                }
-                if imagesCount != 0 && imagesCount != 1 {
-                    pageControl.numberOfPages = imagesCount
-                }
-            } else {
-                recipeImageView.image = UIImage(named: "deffualt")
-            }
-            if recipe?.description == nil || recipe?.description == "" {
-                descriptionTextLabel.text = "No description"
-            } else {
-                descriptionTextLabel.text = recipe?.description
-            }
-            if recipe?.difficulty != nil {
-                setupDifficultyStatus()
-            }
-            instructionTextView.text = recipe?.instructions?.replacingOccurrences(of: "<br>", with: "\n")
-            if recipe?.lastUpdated != 0 {
-                dateLabel.text = convertUnixTime(timeInterval: Double((recipe?.lastUpdated)!))
-            }
-        }
-    }
-    
+    // MARK: - Init View
     override init(frame: CGRect) {
         super.init(frame: frame)
-        if recipe?.images != nil {
-            scrollSize = (recipe?.images?.count)!
+        if recipeImagesArray != nil {
+            scrollSize = (recipeImagesArray!.count)
         }
         setupViews()
         self.scrollViewForImages.contentSize = CGSize(width: self.bounds.size.width,
@@ -58,36 +29,31 @@ class DetailRecipeView: UIView {
     }
     
 // MARK: - Methods
-    private func setupRecipeImage() {
-        if let recipeImageViewURL = recipe?.images {
-            for value in 0..<recipeImageViewURL.count {
-                let imageView = CachedImageView()
-                let indentationX = self.scrollViewForImages.frame.size.width * CGFloat(value)
-                imageView.frame = CGRect(x: indentationX, y: 0,
-                                         width: self.scrollViewForImages.frame.width - Constant.marginLeftAndRight,
-                                         height: self.scrollViewForImages.frame.height)
-                imageView.contentMode = .scaleAspectFit
-                imageView.loadImage(urlString: recipeImageViewURL[value])
-                    self.scrollViewForImages.contentSize.width = self.scrollViewForImages.frame.size.width *
-                    CGFloat(value + 1)
-                if imageView.image == nil {
-                    imageView.image = #imageLiteral(resourceName: "deffualt")
+    private func setupRecipeImage(recipeImages: [String]?) {
+        if let recipeImageViewURL = recipeImages {
+            guard let imagesArray = recipeImages else { return }
+            for value in 0..<imagesArray.count {
+                if value < Constant.maxImagesCount {
+                    let imageView = CachedImageView()
+                    let indentationX = self.scrollViewForImages.frame.size.width * CGFloat(value)
+                    imageView.frame = CGRect(x: indentationX, y: 0,
+                                             width: self.scrollViewForImages.frame.width,
+                                             height: self.scrollViewForImages.frame.height)
+                    imageView.contentMode = .scaleAspectFit
+                    imageView.loadImage(urlString: recipeImageViewURL[value])
+                        self.scrollViewForImages.contentSize.width = self.scrollViewForImages.frame.size.width *
+                        CGFloat(value + 1)
+                    if imageView.image == nil {
+                        imageView.image = #imageLiteral(resourceName: "image-not-found")
+                    }
+                      self.scrollViewForImages.addSubview(imageView)
                 }
-                  self.scrollViewForImages.addSubview(imageView)
             }
         }
     }
     
-    private func convertUnixTime(timeInterval: TimeInterval) -> String {
-        let date = Date(timeIntervalSince1970: timeInterval)
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US")
-        dateFormatter.dateStyle = .medium
-        return dateFormatter.string(from: date)
-    }
-    
-    private func setupDifficultyStatus() {
-        guard let difficulty = recipe?.difficulty else {
+    private func setupDifficultyStatus(difficultyValue: Int?) {
+        guard let difficulty = difficultyValue else {
             return
         }
         for index in 0...(difficulty - 1) {
@@ -95,7 +61,8 @@ class DetailRecipeView: UIView {
             obj.image = UIImage(named: "star-icon")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
         }
     }
-// MARK: - Create UIView
+    
+// MARK: - Create UIElements
     private let scrollViewForImages: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.frame = CGRect(x: 0,
@@ -109,7 +76,7 @@ class DetailRecipeView: UIView {
     }()
     private let recipeImageView: CachedImageView = {
         let imageView = CachedImageView()
-        imageView.image = UIImage(named: "image-not-found")
+        imageView.image = #imageLiteral(resourceName: "image-not-found")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -120,15 +87,11 @@ class DetailRecipeView: UIView {
         viewForPage.backgroundColor = .white
         return viewForPage
     }()
-    private let pageController: UIPageControl = {
-        let pageController = UIPageControl()
-        return pageController
-    }()
     private let nameRecipeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.darkGreen
-        label.numberOfLines = 3
+        label.numberOfLines = 5
         return label
     }()
     private let dateLabel: UILabel = {
@@ -149,13 +112,13 @@ class DetailRecipeView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    private let descriptionTextLabel: UILabel = {
-        let textLabel = UILabel()
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.textColor = UIColor.descriptionText
-        textLabel.font = UIFont.systemFont(ofSize: 14)
-        textLabel.numberOfLines = 3
-        return textLabel
+    private let descriptionTextView: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = true
+        textView.textColor = UIColor.descriptionText
+        textView.font = UIFont.systemFont(ofSize: 14)
+        textView.isScrollEnabled = false
+        return textView
     }()
     private let helpInstructionLabel: UILabel = {
         let label = UILabel()
@@ -172,7 +135,8 @@ class DetailRecipeView: UIView {
         textView.isEditable = false
         textView.font = UIFont.systemFont(ofSize: 12)
         textView.textColor = UIColor.descriptionText
-        textView.translatesAutoresizingMaskIntoConstraints = true
+        textView.translatesAutoresizingMaskIntoConstraints = false
+                textView.isScrollEnabled = false
         return textView
     }()
     private let helpDifficultyLabel: UILabel = {
@@ -193,132 +157,164 @@ class DetailRecipeView: UIView {
         return stackView
     }()
     
-    func setupViews() {
+    // MARK: - Configurate DetailRecipeView
+   private  func addScrollViewForImages() {
         addSubview(scrollViewForImages)
+        scrollViewForImages.snp.makeConstraints { (make) in
+            make.height.equalTo(200)
+            make.top.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+        }
+    }
+    
+    private func addViewForPageControl() {
         addSubview(viewForPageControl)
+        viewForPageControl.snp.makeConstraints { (make) in
+            make.top.equalTo(scrollViewForImages.snp.bottom).offset(8)
+            make.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+        }
+    }
+    
+    private func addNameRecipeLabel() {
         addSubview(nameRecipeLabel)
+        nameRecipeLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(viewForPageControl.snp.bottom).offset(8)
+            make.left.equalTo(self).offset(16)
+            make.right.equalToSuperview().dividedBy(2)
+        }
+    }
+    
+    private func addDateLabel() {
         addSubview(dateLabel)
+        dateLabel.snp.makeConstraints { (make) in
+            make.right.equalTo(self).offset(-16)
+            make.left.equalTo(nameRecipeLabel.snp.left)
+            make.top.equalTo(viewForPageControl.snp.bottom).offset(8)
+        }
+    }
+    
+    private func addHelpDifficultyLabel() {
         addSubview(helpDifficultyLabel)
+        helpDifficultyLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(nameRecipeLabel.snp.bottom).offset(8)
+            make.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+        }
+    }
+    
+    private func addDifficultyStackView() {
         addSubview(difficultyStackView)
+        difficultyStackView.snp.makeConstraints { (make) in
+            make.top.equalTo(helpDifficultyLabel.snp.bottom).offset(-24)
+            make.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+        }
+    }
+    
+    private func addHelpDescriptionLabel() {
         addSubview(helpDescriptionLabel)
-        addSubview(descriptionTextLabel)
-        addSubview(helpInstructionLabel)
+        helpDescriptionLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(difficultyStackView.snp.bottom).offset(-24)
+            make.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+        }
+    }
+    
+    private func addDescriptionTextView() {
+         addSubview(descriptionTextView)
+        descriptionTextView.snp.makeConstraints { (make) in
+            make.top.equalTo(helpDescriptionLabel.snp.bottom).offset(4)
+            make.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+        }
+    }
+    
+    private func addHelpInstructionLabel() {
+         addSubview(helpInstructionLabel)
+        helpInstructionLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(descriptionTextView.snp.bottom).offset(4)
+            make.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+        }
+    }
+    
+    private func addInstructionTextView() {
         addSubview(instructionTextView)
-        scrollViewForImages.delegate = self
-        let intY: Int = 5
-        for _ in 1...intY {
-            let gubaButton: UIImageView = {
+        instructionTextView.snp.makeConstraints { (make) in
+            make.top.equalTo(helpInstructionLabel.snp.bottom).offset(4)
+            make.left.equalTo(self).offset(16)
+            make.right.equalTo(self).offset(-16)
+            make.bottom.equalTo(self).offset(-16)
+        }
+    }
+    
+    func configurateStarsCount() {
+        let starCount: Int = 5
+        for _ in 1...starCount {
+            let starImage: UIImageView = {
                 let imageView = UIImageView()
                 imageView.image = UIImage(named: "startDefault-icon")?.withRenderingMode(.alwaysOriginal)
                 imageView.contentMode = .scaleAspectFit
                 return imageView
             }()
-            addSubview(gubaButton)
-            difficultyStackView.addArrangedSubview(gubaButton)
+            addSubview(starImage)
+            difficultyStackView.addArrangedSubview(starImage)
         }
-        scrollViewForImages.anchor(self.topAnchor,
-                                   left: self.leftAnchor,
-                                   bottom: nil,
-                                   right: self.rightAnchor,
-                                   topConstant: 16,
-                                   leftConstant: 16,
-                                   bottomConstant: 0,
-                                   rightConstant: 16,
-                                   widthConstant: 0,
-                                   heightConstant: UIScreen.main.bounds.height / 3)
-        viewForPageControl.anchor(scrollViewForImages.bottomAnchor,
-                                  left: self.leftAnchor,
-                                  bottom: nil,
-                                  right: self.rightAnchor,
-                                  topConstant: 16,
-                                  leftConstant: 0,
-                                  bottomConstant: 0,
-                                  rightConstant: 0,
-                                  widthConstant: 0,
-                                  heightConstant: 4)
-        nameRecipeLabel.anchor(viewForPageControl.bottomAnchor,
-                               left: self.leftAnchor,
-                               bottom: nil,
-                               right: nil,
-                               topConstant: 8,
-                               leftConstant: 16,
-                               bottomConstant: 0,
-                               rightConstant: 0,
-                               widthConstant: 190,
-                               heightConstant: 62)
-        dateLabel.anchor(nameRecipeLabel.topAnchor,
-                         left: nameRecipeLabel.rightAnchor,
-                         bottom: nil,
-                         right: self.rightAnchor,
-                         topConstant: 0,
-                         leftConstant: 8,
-                         bottomConstant: 0,
-                         rightConstant: 16,
-                         widthConstant: 0,
-                         heightConstant: 62)
-        helpDifficultyLabel.anchor(nameRecipeLabel.bottomAnchor,
-                                   left: nameRecipeLabel.leftAnchor,
-                                   bottom: nil,
-                                   right: dateLabel.rightAnchor,
-                                   topConstant: 8,
-                                   leftConstant: 0,
-                                   bottomConstant: 0,
-                                   rightConstant: 0,
-                                   widthConstant: 0,
-                                   heightConstant: 12)
-        difficultyStackView.anchor(helpDifficultyLabel.bottomAnchor,
-                                   left: helpDifficultyLabel.leftAnchor,
-                                   bottom: nil,
-                                   right: dateLabel.rightAnchor,
-                                   topConstant: 8,
-                                   leftConstant: 0,
-                                   bottomConstant: 0,
-                                   rightConstant: 0,
-                                   widthConstant: 0,
-                                   heightConstant: 50)
-        helpDescriptionLabel.anchor(difficultyStackView.bottomAnchor,
-                                    left: difficultyStackView.leftAnchor,
-                                    bottom: nil,
-                                    right: self.rightAnchor,
-                                    topConstant: 8,
-                                    leftConstant: 0,
-                                    bottomConstant: 0,
-                                    rightConstant: 16,
-                                    widthConstant: 0,
-                                    heightConstant: 12)
-        descriptionTextLabel.anchor(helpDescriptionLabel.bottomAnchor,
-                                    left: helpDescriptionLabel.leftAnchor,
-                                    bottom: nil,
-                                    right: self.rightAnchor,
-                                    topConstant: 4,
-                                    leftConstant: 0,
-                                    bottomConstant: 0,
-                                    rightConstant: 16,
-                                    widthConstant: 0,
-                                    heightConstant: 40)
-        helpInstructionLabel.anchor(descriptionTextLabel.bottomAnchor,
-                                    left: descriptionTextLabel.leftAnchor,
-                                    bottom: nil,
-                                    right: self.rightAnchor,
-                                    topConstant: 4,
-                                    leftConstant: 0,
-                                    bottomConstant: 0,
-                                    rightConstant: 16,
-                                    widthConstant: 0,
-                                    heightConstant: 12)
-        instructionTextView.anchor(helpInstructionLabel.bottomAnchor,
-                                   left: descriptionTextLabel.leftAnchor,
-                                   bottom: self.bottomAnchor,
-                                   right: self.rightAnchor,
-                                   topConstant: 4,
-                                   leftConstant: 0,
-                                   bottomConstant: 4,
-                                   rightConstant: 16,
-                                   widthConstant: 0,
-                                   heightConstant: 0)
     }
+    
+    func setupViews() {
+        scrollViewForImages.delegate = self
+        addScrollViewForImages()
+        addViewForPageControl()
+        addNameRecipeLabel()
+        addDateLabel()
+        addHelpDifficultyLabel()
+        addDifficultyStackView()
+        addHelpDescriptionLabel()
+        addDescriptionTextView()
+        addHelpInstructionLabel()
+        addInstructionTextView()
+        configurateStarsCount()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init(coder!) has not been implemented")
+    }
+    
+    func configureDataForDetailView(recipeName: String?,
+                                    recipeImages: [String]?,
+                                    recipeDescription: String?,
+                                    recipeDifficulty: Int?,
+                                    recipeInstructions: String?,
+                                    recipeLastUpdatedСonverted: String) {
+        nameRecipeLabel.text = recipeName
+        if recipeImages != nil {
+            imageViewRect = self.scrollViewForImages.bounds
+            setupRecipeImage(recipeImages: recipeImages)
+            guard let imagesCount = recipeImages?.count else {
+                return
+            }
+            if imagesCount != 0 && imagesCount != 1 {
+                pageControl.numberOfPages = imagesCount
+                if imagesCount > Constant.maxImagesCount {
+                    pageControl.numberOfPages = Constant.maxImagesCount
+                }
+            }
+        } else {
+            recipeImageView.image = UIImage(named: "deffualt")
+        }
+        if recipeDescription == nil || recipeDescription == "" {
+            descriptionTextView.text = "No description"
+        } else {
+            descriptionTextView.text = recipeDescription
+        }
+        if recipeDifficulty != nil {
+            setupDifficultyStatus(difficultyValue: recipeDifficulty)
+        }
+        instructionTextView.text = recipeInstructions
+        dateLabel.text = recipeLastUpdatedСonverted
+        self.recipeImagesArray = recipeImages
     }
 }
 
