@@ -1,0 +1,6 @@
+framework module Pods_TestProjectSpaceoByKurilov {
+  umbrella header "Pods-TestProjectSpaceoByKurilov-umbrella.h"
+
+  export *
+  module * { export * }
+}
