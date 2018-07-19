@@ -21,7 +21,6 @@
 		AB78376020AA26B800587585 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB78375F20AA26B800587585 /* LaunchScreen.storyboard */; };
 		AB78376620AA587100587585 /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376520AA587100587585 /* RecipeCell.swift */; };
 		AB78376E20AB1A3B00587585 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78376D20AB1A3B00587585 /* Recipe.swift */; };
-		AB78377420ACE4AD00587585 /* ReachabilityConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */; };
 		AB7B178920BFA1B40016FEFF /* Assets 10-20-53-831.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB7B178820BFA1B40016FEFF /* Assets 10-20-53-831.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -41,7 +40,6 @@
 		AB78375F20AA26B800587585 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AB78376520AA587100587585 /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
 		AB78376D20AB1A3B00587585 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
-		AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityConnect.swift; sourceTree = "<group>"; };
 		AB7B178820BFA1B40016FEFF /* Assets 10-20-53-831.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets 10-20-53-831.xcassets"; sourceTree = "<group>"; };
 		B6EE34A0ED03A7B97A03E9BF /* Pods-TestProjectSpaceoByKurilov.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestProjectSpaceoByKurilov.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TestProjectSpaceoByKurilov/Pods-TestProjectSpaceoByKurilov.debug.xcconfig"; sourceTree = "<group>"; };
 		DD0EA37BC593939BEC143BC4 /* Pods-TestProjectSpaceoByKurilov.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestProjectSpaceoByKurilov.release.xcconfig"; path = "Pods/Target Support Files/Pods-TestProjectSpaceoByKurilov/Pods-TestProjectSpaceoByKurilov.release.xcconfig"; sourceTree = "<group>"; };
@@ -126,7 +124,6 @@
 		AB78376120AA57BA00587585 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				AB78377320ACE4AD00587585 /* ReachabilityConnect.swift */,
 				AB6E7FF020E94DB80083E7CB /* Constants.swift */,
 			);
 			path = Helpers;
@@ -309,7 +306,6 @@
 				AB78375020AA199C00587585 /* RecipesListController.swift in Sources */,
 				AB3B02DE20AD67C0004B132D /* RecipeDetailController.swift in Sources */,
 				AB6E7FE420E88F150083E7CB /* UIColor+AppColor.swift in Sources */,
-				AB78377420ACE4AD00587585 /* ReachabilityConnect.swift in Sources */,
 				AB6E7FE220E88EE60083E7CB /* String+contains.swift in Sources */,
 				AB78374E20AA199C00587585 /* AppDelegate.swift in Sources */,
 				AB78376620AA587100587585 /* RecipeCell.swift in Sources */,
